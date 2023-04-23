@@ -8,27 +8,57 @@ const login = async (request: Request, response: Response) => {
   await authService
     .login({ login, hashedPassword })
     .then((result) => {
-      const [success, userData] = result;
-      if (success) {
-        response.json({
-          status: "SUCCESS",
-          data: userData
+      const [success, userId] = result;
+
+      request.session.regenerate((err) => {
+        if (err) console.error(err);
+        request.session.userId = userId;
+
+        request.session.save((err) => {
+          if (err) console.error(err);
+          if (success) {
+            response.status(200).json({
+              status: "SUCCESS",
+              message: "Successful login."
+            });
+          } else {
+            response.status(401).json({
+              status: "FAIL",
+              message: "Invalid login and/or password."
+            });
+          }
         });
-      } else {
-        response.json({
-          status: "FAIL",
-          message: "Invalid login and/or password."
-        });
-      }
+      });
     })
     .catch((error) => {
       console.error("Error while login.");
       console.error(error.message);
-      response.json({
+      response.status(500).json({
         status: "FAIL",
         message: "Error while login. Try again."
       });
     });
+};
+
+const logout = async (request: Request, response: Response) => {
+  request.session.regenerate((err) => {
+    if (err) console.error(err);
+    request.session.userId = null;
+
+    request.session.save((err) => {
+      if (err) {
+        response.status(500).json({
+          status: "FAIL",
+          message: "Error while logout. Try again"
+        });
+      } else {
+        response.status(200).json({
+          status: "SUCCESS",
+          message: "Successful logout."
+        });
+      }
+    });
+  });
 };
 
 const register = async (request: Request, response: Response) => {
@@ -49,18 +79,27 @@ const register = async (request: Request, response: Response) => {
       pictureUrl
     })
     .then((result) => {
-      const [success, userData] = result;
-      if (success) {
-        response.status(201).json({
-          status: "SUCCESS",
-          data: userData
+      const [success, userId] = result;
+
+      request.session.regenerate((err) => {
+        if (err) console.error(err);
+        request.session.userId = userId;
+
+        request.session.save((err) => {
+          if (err) console.error(err);
+          if (success) {
+            response.status(201).json({
+              status: "SUCCESS",
+              message: "Successful registration."
+            });
+          } else {
+            response.status(500).json({
+              status: "FAIL",
+              message: "Error while registering. Try again."
+            });
+          }
         });
-      } else {
-        response.status(500).json({
-          status: "FAIL",
-          message: "Error while registering. Try again."
-        });
-      }
+      });
     })
     .catch((error) => {
       console.error("Error while register.");
@@ -99,6 +138,7 @@ const loginGoogle = async (request: Request, response: Response) => {
 
 export default {
   login,
+  logout,
   register,
   loginGoogle
 };

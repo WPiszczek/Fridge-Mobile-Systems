@@ -6,6 +6,10 @@ authRouter.post("/auth/login", (request: Request, response: Response) => {
   authController.login(request, response);
 });
 
+authRouter.post("/auth/logout", (request: Request, response: Response) => {
+  authController.logout(request, response);
+});
+
 authRouter.post("/auth/register", (request: Request, response: Response) => {
   authController.register(request, response);
 });

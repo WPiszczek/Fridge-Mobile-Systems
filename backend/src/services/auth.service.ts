@@ -14,15 +14,7 @@ const login = async ({
     hashedPassword
   });
   if (result.length > 0) {
-    const userData = {
-      id: result[0].id,
-      login: result[0].login,
-      email: result[0].email,
-      firstName: result[0].firstName,
-      lastName: result[0].lastName,
-      pictureUrl: result[0].pictureUrl
-    };
-    return [true, userData];
+    return [true, result[0].id];
   }
   return [false, null];
 };
@@ -30,8 +22,7 @@ const login = async ({
 const register = async (userData: User) => {
   const result = await knex("users").insert(userData, ["id"]);
   if (result.length > 0) {
-    const userDataWithId = { id: result[0].id, ...userData };
-    return [true, userDataWithId];
+    return [true, result[0].id];
   }
   return [false, null];
 };
