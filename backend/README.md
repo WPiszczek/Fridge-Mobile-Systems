@@ -6,13 +6,13 @@
 
 POST /api/auth/login  
 POST /api/auth/register  
-POST /api/auth/google  
+POST /api/auth/google
 
-GET /api/{user_id}/products  
-GET /api/{user_id}/products/{product_id}  
-POST /api/{user_id}/products  
-PUT /api/{user_id}/products/{product_id}  
-PATCH /api/{user_id}/products/{product_id}  
-DELETE /api/{user_id}/products/{product_id}  
+GET /api/stats  
+GET /api/me
 
-GET /api/{user_id}/stats
+GET /api/products  
+GET /api/products/{product_id}  
+POST /api/products  
+PATCH /api/products/{product_id}  
+DELETE /api/products/{product_id}

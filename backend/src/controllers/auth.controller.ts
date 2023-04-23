@@ -51,12 +51,12 @@ const register = async (request: Request, response: Response) => {
     .then((result) => {
       const [success, userData] = result;
       if (success) {
-        response.json({
+        response.status(201).json({
           status: "SUCCESS",
           data: userData
         });
       } else {
-        response.json({
+        response.status(500).json({
           status: "FAIL",
           message: "Error while registering. Try again."
         });
@@ -66,17 +66,17 @@ const register = async (request: Request, response: Response) => {
       console.error("Error while register.");
       console.error(error.message);
       if (error.message.includes("users_login_key")) {
-        response.json({
+        response.status(409).json({
           status: "FAIL",
           message: "Given login is already used. Try again."
         });
       } else if (error.message.includes("users_email_key")) {
-        response.json({
+        response.status(409).json({
           status: "FAIL",
           message: "Given email is already used. Try again."
         });
       } else {
-        response.json({
+        response.status(500).json({
           status: "FAIL",
           message: "Error while registering. Try again."
         });
@@ -84,6 +84,7 @@ const register = async (request: Request, response: Response) => {
     });
 };
 
+// TODO
 const loginGoogle = async (request: Request, response: Response) => {
   const token = request.body.token;
   await authService.loginGoogle(token).then((result) => {
