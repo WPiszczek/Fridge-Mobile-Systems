@@ -6,4 +6,5 @@ export interface User {
   firstName?: string;
   lastName?: string;
   pictureUrl?: string;
+  googleToken?: string;
 }

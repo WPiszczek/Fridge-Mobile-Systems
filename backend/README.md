@@ -5,7 +5,7 @@
 ## 2. API
 
 POST /api/auth/login  
-POST /api/auth/logout
+POST /api/auth/logout  
 POST /api/auth/register  
 POST /api/auth/google
 
