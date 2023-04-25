@@ -1,14 +1,14 @@
 export type EAN = string;
 
 export interface Product {
-  id: number;
+  id?: number;
   userId: number;
   productCode?: EAN;
   pictureUrl?: string;
   productName?: string;
   quantity?: string;
   status: string;
-  usagePercentage: string;
+  usagePercentage?: string;
   expirationDate?: string;
   openingDate?: string;
   openExpirationDate?: string;
