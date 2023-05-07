@@ -1,12 +1,12 @@
 import { BarCodeScannedCallback, BarCodeScanner } from "expo-barcode-scanner";
 import { useEffect, useState } from "react";
-import { Button, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
 
 export default function BarcodeScannerScreen() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [scanned, setScanned] = useState(false);
+  const [barCode, setBarCode] = useState<string>();
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -17,10 +17,8 @@ export default function BarcodeScannerScreen() {
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned: BarCodeScannedCallback = ({ type, data }) => {
-    setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-  };
+  const handleBarCodeScanned: BarCodeScannedCallback = ({ data }) =>
+    setBarCode(data);
 
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
@@ -32,12 +30,14 @@ export default function BarcodeScannerScreen() {
   return (
     <View style={styles.container}>
       <BarCodeScanner
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        barCodeTypes={[
+          BarCodeScanner.Constants.BarCodeType.ean8,
+          BarCodeScanner.Constants.BarCodeType.ean13,
+        ]}
+        onBarCodeScanned={handleBarCodeScanned}
         style={StyleSheet.absoluteFillObject}
       />
-      {scanned && (
-        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
-      )}
+      {barCode && <Text>{barCode}</Text>}
     </View>
   );
 }
