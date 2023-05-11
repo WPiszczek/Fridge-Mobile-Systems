@@ -1,9 +1,16 @@
-import { useState } from "react";
-import { TextInput, StyleSheet, View } from "react-native";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { TextInput, StyleSheet, View, Pressable, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Link, useRouter, useSearchParams } from "expo-router";
+
+interface Params {
+  [key: string]: string | string[];
+  searchQuery: string;
+}
 
 export const ProductSearch = () => {
-  const [query, setQuery] = useState("");
+  const router = useRouter();
+  const { searchQuery } = useSearchParams<Params>();
 
   return (
     <View style={styles.view}>
@@ -11,14 +18,29 @@ export const ProductSearch = () => {
         <MaterialCommunityIcons name="magnify" size={24} color="#3c3c3c" />
       </View>
       <TextInput
-        value={query}
-        onChangeText={(text) => setQuery(text)}
+        value={searchQuery}
+        onChangeText={(text) => router.setParams({ searchQuery: text })}
         placeholder="Search product"
         style={styles.input}
       />
-      <View style={styles.icon}>
-        <MaterialCommunityIcons name="barcode-scan" size={24} color="#3c3c3c" />
-      </View>
+      <Link
+        href={{
+          pathname: "/barcodeScanner",
+          params: {
+            returnTo: "products",
+          },
+        }}
+        asChild
+        style={styles.icon}
+      >
+        <Pressable>
+          <MaterialCommunityIcons
+            name="barcode-scan"
+            size={24}
+            color="#3c3c3c"
+          />
+        </Pressable>
+      </Link>
     </View>
   );
 };
@@ -28,7 +50,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    borderRadius: 99,
+    aspectRatio: 1,
   },
   view: {
     display: "flex",
@@ -37,7 +60,7 @@ const styles = StyleSheet.create({
     gap: 8,
 
     height: 48,
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     color: "#3c3c3c",
     backgroundColor: "#efefef",
     borderRadius: 8,

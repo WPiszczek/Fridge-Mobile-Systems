@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Alert, Modal, Pressable, StyleSheet } from "react-native";
 
 import { Text, View } from "../../components/Themed";
+import { useRouter, useSearchParams } from "expo-router";
 
 export default function BarcodeScannerScreen() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
@@ -18,8 +19,12 @@ export default function BarcodeScannerScreen() {
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned: BarCodeScannedCallback = ({ data }) =>
+  const router = useRouter();
+
+  const handleBarCodeScanned: BarCodeScannedCallback = ({ data }) => {
+    router.replace({ pathname: "products", params: { searchQuery: data } });
     setBarCode(data);
+  };
 
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
@@ -27,6 +32,8 @@ export default function BarcodeScannerScreen() {
   if (!hasPermission) {
     return <Text>No access to camera</Text>;
   }
+
+  const { returnTo } = useSearchParams();
 
   return (
     <View style={styles.container}>
@@ -39,7 +46,7 @@ export default function BarcodeScannerScreen() {
         style={StyleSheet.absoluteFillObject}
       />
       <Pressable onPress={() => setModalVisible(true)}>
-        <Text>Open the modal</Text>
+        <Text>Open the modal {returnTo}</Text>
       </Pressable>
 
       <Modal
