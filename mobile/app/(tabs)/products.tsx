@@ -13,7 +13,7 @@ export default function TabOneScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <EditScreenInfo path="app/(tabs)/index.tsx" />
+      <EditScreenInfo path="app/(tabs)/products.tsx" />
     </View>
   );
 }
@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+    padding: 15,
   },
   title: {
     fontSize: 20,
