@@ -10,6 +10,7 @@ interface LoginFormValues {
 
 export const LoginForm: FC = () => {
   const { control, handleSubmit } = useForm<LoginFormValues>();
+
   const handleLogin = useCallback(async (formData: LoginFormValues) => {
     alert(JSON.stringify(formData, null, 2));
     const res = await fetch("http://localhost:8000/api/auth/login", {
