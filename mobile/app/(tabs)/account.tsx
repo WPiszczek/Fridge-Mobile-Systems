@@ -1,14 +1,12 @@
 import { StyleSheet } from 'react-native';
 
-import EditScreenInfo from '../../components/EditScreenInfo';
-import { Text, View } from '../../components/Themed';
+import { Input } from '../../components/Input';
+import { View } from '../../components/Themed';
 
 export default function TabThreeScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Three</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="app/(tabs)/three.tsx" />
+      <Input>test</Input>
     </View>
   );
 }
