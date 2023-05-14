@@ -3,14 +3,11 @@ import { StyleSheet, Text, Button } from "react-native";
 import { Input } from "../../components/Input";
 import { View } from "../../components/Themed";
 import { useCallback } from "react";
+import { useForm } from "react-hook-form";
+import { FormInput } from "../../components/FormInput";
+import { LoginForm } from "../../forms/LoginForm";
 
 export default function TabThreeScreen() {
-  const handleLogin = useCallback(async () => {
-    const res = await fetch("http://localhost:8000/api/products");
-    const data = await res.json();
-    alert(JSON.stringify(data, null, 2));
-  }, []);
-
   return (
     <View style={styles.container}>
       <Text>Register</Text>
@@ -22,15 +19,7 @@ export default function TabThreeScreen() {
         title="Register"
         accessibilityLabel="Learn more about this purple button"
       />
-
-      <Text>Login</Text>
-      <Input placeholder="login" />
-      <Input placeholder="password" textContentType="password" />
-      <Button
-        onPress={handleLogin}
-        title="Login"
-        accessibilityLabel="Learn more about this purple button"
-      />
+      <LoginForm />
     </View>
   );
 }

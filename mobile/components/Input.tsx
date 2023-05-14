@@ -1,16 +1,16 @@
 import { FC, ReactElement } from "react";
 import { StyleSheet, TextInput, TextInputProps, View } from "react-native";
 
-interface InputProps extends TextInputProps {
+export interface InputProps extends TextInputProps {
   before?: ReactElement;
   after?: ReactElement;
 }
 
-export const Input: FC<InputProps> = (props) => (
+export const Input: FC<InputProps> = ({ before, after, ...restProps }) => (
   <View style={styles.container}>
-    <>{props.before}</>
-    <TextInput style={styles.input} {...props} />
-    <>{props.after}</>
+    <>{before}</>
+    <TextInput style={styles.input} {...restProps} />
+    <>{after}</>
   </View>
 );
 
