@@ -3,7 +3,7 @@ import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import { ProductSearch } from "../../components/ProductSearch";
 
-export default function TabOneScreen() {
+export default function ProductListScreen() {
   return (
     <View style={styles.container}>
       <ProductSearch />

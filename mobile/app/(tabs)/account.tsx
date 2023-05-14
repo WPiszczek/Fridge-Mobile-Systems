@@ -1,24 +1,12 @@
-import { StyleSheet, Text, Button } from "react-native";
-
-import { Input } from "../../components/Input";
+import { StyleSheet } from "react-native";
 import { View } from "../../components/Themed";
-import { useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { FormInput } from "../../components/FormInput";
 import { LoginForm } from "../../forms/LoginForm";
+import { RegisterForm } from "../../forms/RegisterForm";
 
-export default function TabThreeScreen() {
+export default function AccountScreen() {
   return (
     <View style={styles.container}>
-      <Text>Register</Text>
-      <Input placeholder="login" />
-      <Input placeholder="password" textContentType="newPassword" />
-      <Input placeholder="repeat password" textContentType="newPassword" />
-      <Button
-        onPress={() => alert("hello")}
-        title="Register"
-        accessibilityLabel="Learn more about this purple button"
-      />
+      <RegisterForm />
       <LoginForm />
     </View>
   );
