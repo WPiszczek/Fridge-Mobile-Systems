@@ -16,7 +16,15 @@ export const RegisterForm = () => {
   const { control, handleSubmit } = useForm<RegisterFormValues>();
 
   const handleRegister = useCallback(async (formData: RegisterFormValues) => {
-    alert(JSON.stringify(formData, null, 2));
+    const res = await fetch("http://localhost:8000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    alert(JSON.stringify(data, null, 2));
   }, []);
 
   return (
