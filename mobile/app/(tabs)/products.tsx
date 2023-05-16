@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native";
 import EditScreenInfo from "../../components/EditScreenInfo";
 import { Text, View } from "../../components/Themed";
 import { ProductSearch } from "../../components/ProductSearch";
+import ListItem from "../../components/ListItem";
 
 export default function ProductListScreen() {
   return (
@@ -13,7 +14,8 @@ export default function ProductListScreen() {
         lightColor="#eee"
         darkColor="rgba(255,255,255,0.1)"
       />
-      <EditScreenInfo path="app/(tabs)/products.tsx" />
+      <ListItem />
+      {/* <EditScreenInfo path="app/(tabs)/products.tsx" /> */}
     </View>
   );
 }
