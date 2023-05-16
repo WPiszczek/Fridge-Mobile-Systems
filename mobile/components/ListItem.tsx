@@ -1,9 +1,23 @@
 import React from "react";
+import { parse } from 'date-fns';
 import { StyleSheet, Image } from "react-native";
 import Colors from "../constants/Colors";
 import { Text, View } from "./Themed";
+interface ListItemProps{
+  item: {
+    code: number;
+    itemName: string;
+    amount: string;
+    categories: string[];
+    date: string;
+  };
+}
 
-export default function ListItem() {
+export default function ListItem({item}: ListItemProps) {
+  let timeBetween = parse(item.date, 'dd.MM.yyyy', new Date()).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0);
+  let days = Math.ceil(timeBetween/ (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
+  console.log(parse(item.date, 'dd.MM.yyyy', new Date()));
+  console.log(new Date());
   return (
     <View style={styles.ListItem}>
       <Image
@@ -12,9 +26,9 @@ export default function ListItem() {
       />
       <View style={styles.ListItemDescription}>
         <View style={styles.ListItemDescriptionLeft}>
-          <Text style={styles.ItemCode}>3017620422003</Text>
-          <Text style={styles.ItemName}>Nutella</Text>
-          <Text style={styles.ItemAmount}>400g</Text>
+          <Text style={styles.ItemCode}>{item.code.toString()}</Text>
+          <Text style={styles.ItemName}>{item.itemName}</Text>
+          <Text style={styles.ItemAmount}>{item.amount}</Text>
         </View>
         <View style={styles.ListItemDescriptionRight}>
           <Text style={styles.ItemCategories}>Słodycze</Text>
@@ -23,8 +37,8 @@ export default function ListItem() {
       </View>
       <View style={styles.SpaceFiller}></View>
       <View style={styles.ExpirationDate}>
-        <Text style={styles.ExpirationDateDate}>21.02.2022</Text>
-        <Text style={styles.ExpirationDateColoredPart}>14 dni</Text> 
+        <Text style={styles.ExpirationDateDate}>{item.date}</Text>
+        <Text style={styles.ExpirationDateColoredPart}>{`${days} dni`}</Text>
         <Text style={styles.ExpirationDatePercentage}>70%</Text>
       </View>
     </View>
@@ -66,7 +80,11 @@ const styles = StyleSheet.create({
   SpaceFiller: {
     flex: 1,
   },
-  ExpirationDate: {},
+  ExpirationDate: {
+    padding: 5,
+    flexDirection: "column",
+    alignItems: "flex-end",
+  },
   ExpirationDateDate: {
     fontSize: 12,
   },
