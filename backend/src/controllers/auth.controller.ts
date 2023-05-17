@@ -31,11 +31,11 @@ const login = async (request: Request, response: Response) => {
       });
     })
     .catch((error) => {
-      console.error("Error while login.");
+      console.error("Error while logging in.");
       console.error(error.message);
       response.status(500).json({
         status: "FAIL",
-        message: "Error while login. Try again."
+        message: "Error while logging in. Try again."
       });
     });
 };

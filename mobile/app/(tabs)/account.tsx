@@ -1,6 +1,6 @@
 import { Button, StyleSheet, Text } from "react-native";
 import { useLogout } from "../../api/services/auth";
-import { useMe } from "../../api/services/me";
+import { useMe } from "../../api/services/user";
 import { View } from "../../components/Themed";
 import { LoginForm } from "../../forms/LoginForm";
 import { RegisterForm } from "../../forms/RegisterForm";

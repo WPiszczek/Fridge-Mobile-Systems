@@ -11,36 +11,35 @@ export interface RegisterFormValues {
   pictureUrl?: string;
 }
 
-export const useRegister = () => useMutation({
-  mutationKey: ["register"],
-  mutationFn: async (data: RegisterFormValues) =>
-    await apiClient.post("/auth/register", data)
-  ,
-  onSuccess: () =>
-    queryClient.invalidateQueries(["me"]),
-});
+export const useRegister = () =>
+  useMutation({
+    mutationKey: ["register"],
+    mutationFn: async (data: RegisterFormValues) =>
+      await apiClient.post("/auth/register", data),
+    onSuccess: () => queryClient.invalidateQueries(["me"]),
+  });
 
 export interface LoginFormValues {
   login: string;
   hashedPassword: string;
 }
 
-export const useLogin = () => useMutation({
-  mutationKey: ["login"],
-  mutationFn: async (data: LoginFormValues) =>
-    await apiClient.post("/auth/login", data)
-  ,
-  onSuccess: () =>
-    queryClient.invalidateQueries(["me"]),
-});
+export const useLogin = () =>
+  useMutation({
+    mutationKey: ["login"],
+    mutationFn: async (data: LoginFormValues) =>
+      await apiClient.post("/auth/login", data),
+    onSuccess: () => queryClient.invalidateQueries(["me"]),
+  });
 
-export const useLogout = () => useMutation({
-  mutationKey: ["logout"],
-  mutationFn: async () => await apiClient.post("/auth/logout"),
-  onSuccess: () => {
-    queryClient.clear()
-    Toast.show("You logged out successfully!", {
-      duration: Toast.durations.SHORT,
-    });
-  },
-});
+export const useLogout = () =>
+  useMutation({
+    mutationKey: ["logout"],
+    mutationFn: async () => await apiClient.post("/auth/logout"),
+    onSuccess: () => {
+      queryClient.clear();
+      Toast.show("You have successfully logged out!", {
+        duration: Toast.durations.SHORT,
+      });
+    },
+  });
