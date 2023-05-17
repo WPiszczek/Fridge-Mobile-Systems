@@ -1,27 +1,13 @@
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Button, Text } from "react-native";
+import { Button, Text } from "react-native";
+import { LoginFormValues, useLogin } from "../api/services/auth";
 import { FormInput } from "../components/FormInput";
-import { apiClient, queryClient } from "../api/clients";
-import { useMutation } from "@tanstack/react-query";
-
-interface LoginFormValues {
-  login: string;
-  hashedPassword: string;
-}
 
 export const LoginForm: FC = () => {
   const { control, handleSubmit } = useForm<LoginFormValues>();
 
-  const { mutate: login } = useMutation({
-    mutationKey: ["login"],
-    mutationFn: async (data: LoginFormValues) => {
-      await apiClient.post("/auth/login", data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["me"]);
-    },
-  });
+  const { mutate: login } = useLogin();
 
   return (
     <>

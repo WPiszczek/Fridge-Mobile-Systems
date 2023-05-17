@@ -1,3 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "../clients";
 
-export const getMe = () => apiClient.get("/me")
+export const useMe = () => useQuery({
+    queryKey: ["me"],
+    queryFn: () => apiClient.get("/me"),
+})

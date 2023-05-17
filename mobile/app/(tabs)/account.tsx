@@ -1,27 +1,17 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button, StyleSheet, Text } from "react-native";
+import { useLogout } from "../../api/services/auth";
+import { useMe } from "../../api/services/me";
 import { View } from "../../components/Themed";
 import { LoginForm } from "../../forms/LoginForm";
 import { RegisterForm } from "../../forms/RegisterForm";
-import { getMe } from "../../api/services/me";
-import { apiClient, queryClient } from "../../api/clients";
 
 export default function AccountScreen() {
-  const { data, error, status } = useQuery({
-    queryKey: ["me"],
-    queryFn: getMe,
-  });
-
-  const { mutate: logout } = useMutation({
-    mutationKey: ["logout"],
-    mutationFn: async () => await apiClient.post("/auth/logout"),
-    onSuccess: () => queryClient.clear(),
-  });
+  const { data } = useMe();
+  const { mutate: logout } = useLogout();
 
   return (
     <View style={styles.container}>
-      <Text>{status}</Text>
-      {!error && data ? (
+      {data ? (
         <>
           <Text>
             Hey {data.data.data.firstName} {data.data.data.lastName}!
@@ -35,14 +25,6 @@ export default function AccountScreen() {
         <>
           <RegisterForm />
           <LoginForm />
-          <Button
-            title="hello"
-            onPress={() => {
-              fetch("http://localhost:8000/api/me").then((res) => {
-                res.json().then((data) => alert(JSON.stringify(data, null, 2)));
-              });
-            }}
-          />
         </>
       )}
     </View>
