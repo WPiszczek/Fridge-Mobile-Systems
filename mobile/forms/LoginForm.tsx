@@ -2,6 +2,8 @@ import { FC, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Alert, Button, Text } from "react-native";
 import { FormInput } from "../components/FormInput";
+import { apiClient, queryClient } from "../api/clients";
+import { useMutation } from "@tanstack/react-query";
 
 interface LoginFormValues {
   login: string;
@@ -11,36 +13,15 @@ interface LoginFormValues {
 export const LoginForm: FC = () => {
   const { control, handleSubmit } = useForm<LoginFormValues>();
 
-  const handleLogin = useCallback(async (formData: LoginFormValues) => {
-    let res;
-    try {
-      res = await fetch("http://localhost:8000/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      });
-    } catch (e) {
-      console.error("2" + e);
-    }
-    const data = await res?.json();
-
-    Alert.alert(data?.status, data?.message);
-    let res2;
-    try {
-      res2 = await fetch("http://localhost:8000/api/me", {
-        method: "GET",
-        credentials: "include",
-      });
-    } catch (e) {
-      console.error("1" + JSON.stringify(e));
-    }
-    const data2 = await res2?.json();
-
-    Alert.alert(data2?.status, JSON.stringify(data2, null, 2));
-  }, []);
+  const { mutate: login } = useMutation({
+    mutationKey: ["login"],
+    mutationFn: async (data: LoginFormValues) => {
+      await apiClient.post("/auth/login", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(["me"]);
+    },
+  });
 
   return (
     <>
@@ -54,7 +35,7 @@ export const LoginForm: FC = () => {
         secureTextEntry
       />
       <Button
-        onPress={handleSubmit(handleLogin)}
+        onPress={handleSubmit((data) => login(data))}
         title="Login"
         accessibilityLabel="Learn more about this purple button"
       />
