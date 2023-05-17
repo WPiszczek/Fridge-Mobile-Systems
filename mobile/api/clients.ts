@@ -1,9 +1,11 @@
-import { QueryClient, QueryOptions } from "@tanstack/react-query";
+import { QueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
+import { Platform } from "react-native";
 import Toast from "react-native-root-toast";
+import { WEB_BACKEND_URL, IOS_ANDROID_BACKEND_URL } from "@env";
 
 export const apiClient = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: Platform.OS !== "web" ? IOS_ANDROID_BACKEND_URL : WEB_BACKEND_URL,
   timeout: 1000,
   withCredentials: true,
 });
