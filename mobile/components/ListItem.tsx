@@ -1,9 +1,9 @@
 import React from "react";
-import { parse } from 'date-fns';
+import { parse } from "date-fns";
 import { StyleSheet, Image } from "react-native";
 import Colors from "../constants/Colors";
 import { Text, View } from "./Themed";
-interface ListItemProps{
+interface ListItemProps {
   item: {
     code: number;
     itemName: string;
@@ -13,10 +13,12 @@ interface ListItemProps{
   };
 }
 
-export default function ListItem({item}: ListItemProps) {
-  let timeBetween = parse(item.date, 'dd.MM.yyyy', new Date()).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0);
-  let days = Math.ceil(timeBetween/ (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
-  console.log(parse(item.date, 'dd.MM.yyyy', new Date()));
+export default function ListItem({ item }: ListItemProps) {
+  let timeBetween =
+    parse(item.date, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) -
+    new Date().setHours(0, 0, 0, 0);
+  let days = Math.ceil(timeBetween / (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
+  console.log(parse(item.date, "dd.MM.yyyy", new Date()));
   console.log(new Date());
   return (
     <View style={styles.ListItem}>
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
   },
   ListItemDescription: {
     flexDirection: "row",
-    padding: 10,
+    paddingVertical: 10,
   },
   ItemCode: {
     fontSize: 12,
