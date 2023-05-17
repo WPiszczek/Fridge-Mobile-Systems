@@ -66,8 +66,8 @@ export default function ProductListScreen() {
     <View style={styles.container}>
       <ProductSearch />
       <ScrollView style={styles.scroll}>
-        {items.map((it) => (
-          <ListItem item={it} />
+        {items.map((it, index) => (
+          <ListItem item={it} key={index} />
         ))}
       </ScrollView>
       {/* <ListItem item={item} /> */}

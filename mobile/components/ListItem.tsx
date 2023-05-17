@@ -18,8 +18,8 @@ export default function ListItem({ item }: ListItemProps) {
     parse(item.date, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) -
     new Date().setHours(0, 0, 0, 0);
   let days = Math.ceil(timeBetween / (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
-  console.log(parse(item.date, "dd.MM.yyyy", new Date()));
-  console.log(new Date());
+  // console.log(parse(item.date, "dd.MM.yyyy", new Date()));
+  // console.log(new Date());
   return (
     <View style={styles.ListItem}>
       <Image
