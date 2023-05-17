@@ -1,9 +1,10 @@
 import React from "react";
-import { parse } from 'date-fns';
+import { parse } from "date-fns";
 import { StyleSheet, Image } from "react-native";
 import Colors from "../constants/Colors";
 import { Text, View } from "./Themed";
-interface ListItemProps{
+import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+interface ListItemProps {
   item: {
     code: number;
     itemName: string;
@@ -13,11 +14,31 @@ interface ListItemProps{
   };
 }
 
-export default function ListItem({item}: ListItemProps) {
-  let timeBetween = parse(item.date, 'dd.MM.yyyy', new Date()).setHours(0, 0, 0, 0) - new Date().setHours(0, 0, 0, 0);
-  let days = Math.ceil(timeBetween/ (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
-  console.log(parse(item.date, 'dd.MM.yyyy', new Date()));
+export default function ListItem({ item }: ListItemProps) {
+  let timeBetween =
+    parse(item.date, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) -
+    new Date().setHours(0, 0, 0, 0);
+  let days = Math.ceil(timeBetween / (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
+  console.log(parse(item.date, "dd.MM.yyyy", new Date()));
   console.log(new Date());
+  let warning =
+    days < 7 ? (
+      days < 5 ? (
+        <AntDesign
+          name="warning"
+          style={styles.ExpirationDateWarning}
+          color="red"
+        />
+      ) : (
+        <AntDesign
+          name="exclamationcircleo"
+          style={styles.ExpirationDateWarning}
+          color="orange"
+        />
+      )
+    ) : (
+      ""
+    );
   return (
     <View style={styles.ListItem}>
       <Image
@@ -38,14 +59,18 @@ export default function ListItem({item}: ListItemProps) {
       <View style={styles.SpaceFiller}></View>
       <View style={styles.ExpirationDate}>
         <Text style={styles.ExpirationDateDate}>{item.date}</Text>
-        <Text style={styles.ExpirationDateColoredPart}>{`${days} dni`}</Text>
+        <Text style={[styles.ExpirationDateColoredPart, ]}>
+          {/* {" "} */}
+          {warning}
+          {`${days} dni`}
+        </Text>
         <Text style={styles.ExpirationDatePercentage}>70%</Text>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = StyleSheet.create({ //TODO - szerokość 100%
   ListItem: {
     flexDirection: "row",
     width: "100%",
@@ -86,6 +111,9 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   ExpirationDateDate: {
+    fontSize: 12,
+  },
+  ExpirationDateWarning: {
     fontSize: 12,
   },
   ExpirationDateColoredPart: {}, //TODO - zmiana koloru w zaleznosci od daty

@@ -11,14 +11,14 @@ export default function ProductListScreen() {
       itemName: "Nutella",
       amount: "400g",
       categories: ["Słodycze", "Szafka lewa górna"],
-      date: "17.05.2023",
+      date: "30.05.2023",
     },
     {
       code: 3017620422003,
       itemName: "Nutella2as",
       amount: "400g",
       categories: ["Słodycze", "Szafka lewa górna"],
-      date: "17.05.2023",
+      date: "22.05.2023",
     },
     {
       code: 3017620422003,
