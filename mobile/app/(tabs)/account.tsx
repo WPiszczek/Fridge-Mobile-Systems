@@ -14,14 +14,8 @@ export default function AccountScreen() {
 
   const { mutate: logout } = useMutation({
     mutationKey: ["logout"],
-    mutationFn: async () => {
-      const res = await apiClient.post("/auth/logout");
-      alert(JSON.stringify(res.data, null, 2));
-      return res.data.data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["me"]);
-    },
+    mutationFn: async () => await apiClient.post("/auth/logout"),
+    onSuccess: () => queryClient.clear(),
   });
 
   return (
