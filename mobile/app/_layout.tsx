@@ -49,7 +49,13 @@ function RootLayoutNav() {
           <RootSiblingParent>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+              <Stack.Screen
+                name="productSearchScanner"
+                options={{
+                  title: "Search by scanning the barcode",
+                  presentation: "modal",
+                }}
+              />
             </Stack>
           </RootSiblingParent>
         </QueryClientProvider>
