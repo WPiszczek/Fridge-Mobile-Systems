@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet } from "react-native";
-import ListItem from "../../components/ListItem";
-import { ProductSearch } from "../../components/ProductSearch";
-import { View } from "../../components/Themed";
+import ListItem from "../../../components/ListItem";
+import { ProductSearch } from "../../../components/ProductSearch";
+import { View } from "../../../components/Themed";
 
 export default function ProductListScreen() {
   const items = [
@@ -71,7 +71,6 @@ export default function ProductListScreen() {
         ))}
       </ScrollView>
       {/* <ListItem item={item} /> */}
-      {/* <EditScreenInfo path="app/(tabs)/products.tsx" /> */}
     </View>
   );
 }

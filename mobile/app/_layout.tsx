@@ -14,11 +14,6 @@ import { queryClient } from "../api/clients";
 
 export { ErrorBoundary } from "expo-router";
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: "(tabs)",
-};
-
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -49,13 +44,6 @@ function RootLayoutNav() {
           <RootSiblingParent>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="productSearchScanner"
-                options={{
-                  title: "Search by scanning the barcode",
-                  presentation: "modal",
-                }}
-              />
             </Stack>
           </RootSiblingParent>
         </QueryClientProvider>
