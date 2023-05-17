@@ -23,7 +23,11 @@ export const ProductSearch = () => {
         </View>
       }
       after={
-        <Link href="products/productSearchScanner" asChild style={styles.icon}>
+        <Link
+          href="products/product-search-scanner"
+          asChild
+          style={styles.icon}
+        >
           <Pressable>
             <MaterialCommunityIcons
               name="barcode-scan"

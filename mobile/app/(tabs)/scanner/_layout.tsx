@@ -4,17 +4,17 @@ export const unstable_settings = {
   initialRouteName: "index",
 };
 
-const ProductsLayout = () => (
+const ScannerLayout = () => (
   <Stack>
     <Stack.Screen name="index" options={{ headerShown: false }} />
     <Stack.Screen
-      name="product-search-scanner"
+      name="[barcode]"
       options={{
-        title: "Search by scanning the barcode",
+        title: "Add product",
         presentation: "modal",
       }}
     />
   </Stack>
 );
 
-export default ProductsLayout;
+export default ScannerLayout;
