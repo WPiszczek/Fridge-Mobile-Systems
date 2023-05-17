@@ -1,27 +1,13 @@
-import { FC, useCallback } from "react";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { Alert, Button, Text } from "react-native";
+import { Button, Text } from "react-native";
+import { LoginFormValues, useLogin } from "../api/services/auth";
 import { FormInput } from "../components/FormInput";
-
-interface LoginFormValues {
-  login: string;
-  hashedPassword: string;
-}
 
 export const LoginForm: FC = () => {
   const { control, handleSubmit } = useForm<LoginFormValues>();
 
-  const handleLogin = useCallback(async (formData: LoginFormValues) => {
-    const res = await fetch("http://localhost:8000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-    const data = await res.json();
-    Alert.alert(data.status, data.message);
-  }, []);
+  const { mutate: login } = useLogin();
 
   return (
     <>
@@ -35,7 +21,7 @@ export const LoginForm: FC = () => {
         secureTextEntry
       />
       <Button
-        onPress={handleSubmit(handleLogin)}
+        onPress={handleSubmit((data) => login(data))}
         title="Login"
         accessibilityLabel="Learn more about this purple button"
       />

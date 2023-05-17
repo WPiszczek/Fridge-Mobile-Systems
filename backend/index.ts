@@ -30,7 +30,7 @@ app.use(
 );
 app.use(
   cors({
-    origin: "*",
+    origin: "http://localhost:19000",
     methods: ["POST", "DELETE", "GET", "PATCH"],
     credentials: true
   })

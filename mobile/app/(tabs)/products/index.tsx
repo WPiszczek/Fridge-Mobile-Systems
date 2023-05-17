@@ -1,8 +1,7 @@
-import { StyleSheet, ScrollView } from "react-native";
-import EditScreenInfo from "../../components/EditScreenInfo";
-import { Text, View } from "../../components/Themed";
-import { ProductSearch } from "../../components/ProductSearch";
-import ListItem from "../../components/ListItem";
+import { ScrollView, StyleSheet } from "react-native";
+import ListItem from "../../../components/ListItem";
+import { ProductSearch } from "../../../components/ProductSearch";
+import { View } from "../../../components/Themed";
 
 export default function ProductListScreen() {
   const items = [
@@ -66,19 +65,12 @@ export default function ProductListScreen() {
   return (
     <View style={styles.container}>
       <ProductSearch />
-      <Text style={styles.title}>Tab One</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
       <ScrollView style={styles.scroll}>
-        {items.map((it) => (
-          <ListItem item={it} />
+        {items.map((it, index) => (
+          <ListItem item={it} key={index} />
         ))}
       </ScrollView>
       {/* <ListItem item={item} /> */}
-      {/* <EditScreenInfo path="app/(tabs)/products.tsx" /> */}
     </View>
   );
 }
@@ -88,18 +80,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    // padding: 15, //TODO - sprawia, ze scrollview jest uciety
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: "80%",
+    padding: 15,
   },
   scroll: {
+    width: "100%",
     // position: "relative",
   },
 });

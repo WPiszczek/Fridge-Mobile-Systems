@@ -24,12 +24,7 @@ export const ProductSearch = () => {
       }
       after={
         <Link
-          href={{
-            pathname: "/barcodeScanner",
-            params: {
-              returnTo: "products",
-            },
-          }}
+          href="products/product-search-scanner"
           asChild
           style={styles.icon}
         >

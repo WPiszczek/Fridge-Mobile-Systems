@@ -81,7 +81,7 @@ const styles = StyleSheet.create({ //TODO - szerokość 100%
   },
   ListItemDescription: {
     flexDirection: "row",
-    padding: 10,
+    paddingVertical: 10,
   },
   ItemCode: {
     fontSize: 12,

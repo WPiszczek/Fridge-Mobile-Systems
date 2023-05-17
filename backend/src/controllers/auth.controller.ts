@@ -66,8 +66,8 @@ const register = async (request: Request, response: Response) => {
   const email: string = request.body.email;
   const hashedPassword: string = request.body.hashedPassword;
   const firstName: string = request.body.firstName ?? null;
-  const lastName: string = request.body.firstName ?? null;
-  const pictureUrl: string = request.body.firstName ?? null;
+  const lastName: string = request.body.lastName ?? null;
+  const pictureUrl: string = request.body.pictureUrl ?? null;
 
   await authService
     .register({
