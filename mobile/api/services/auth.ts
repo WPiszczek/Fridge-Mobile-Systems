@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import Toast from "react-native-root-toast";
 import { apiClient, queryClient } from "../clients";
 
 export interface RegisterFormValues {
@@ -19,8 +20,6 @@ export const useRegister = () => useMutation({
     queryClient.invalidateQueries(["me"]),
 });
 
-
-
 export interface LoginFormValues {
   login: string;
   hashedPassword: string;
@@ -38,5 +37,10 @@ export const useLogin = () => useMutation({
 export const useLogout = () => useMutation({
   mutationKey: ["logout"],
   mutationFn: async () => await apiClient.post("/auth/logout"),
-  onSuccess: () => queryClient.clear(),
+  onSuccess: () => {
+    queryClient.clear()
+    Toast.show("You logged out successfully!", {
+      duration: Toast.durations.SHORT,
+    });
+  },
 });
