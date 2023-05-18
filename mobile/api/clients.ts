@@ -16,10 +16,14 @@ export interface ErrorResponse {
 }
 
 export const handleError = (error: unknown) => {
-  Toast.show((error as AxiosError<ErrorResponse>).response?.data?.message ?? 'Unknown error occured.', {
-    duration: Toast.durations.SHORT,
-  });
-}
+  Toast.show(
+    (error as AxiosError<ErrorResponse>).response?.data?.message ??
+      "Unknown error occured.",
+    {
+      duration: Toast.durations.SHORT,
+    }
+  );
+};
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,7 +40,6 @@ export const queryClient = new QueryClient({
     },
     mutations: {
       onError: handleError,
-    }
-  }
+    },
+  },
 });
-

@@ -24,15 +24,15 @@ app.use(
       secure: false,
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: false,
-      httpOnly: true
-    }
+      httpOnly: true,
+    },
   })
 );
 app.use(
   cors({
     origin: "http://localhost:19000",
     methods: ["POST", "DELETE", "GET", "PATCH"],
-    credentials: true
+    credentials: true,
   })
 );
 app.use(express.json());
