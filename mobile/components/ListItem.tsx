@@ -21,8 +21,13 @@ interface ListItemProps {
 }
 
 export default function ListItem({ item }: ListItemProps) {
+  let soonerExpirationDate =
+    parse(item.expirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) <
+    parse(item.openExpirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0)
+      ? item.expirationDate
+      : item.openExpirationDate;
   let timeBetween =
-    parse(item.expirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) -
+    parse(soonerExpirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) -
     new Date().setHours(0, 0, 0, 0);
   let days = Math.ceil(timeBetween / (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
   let warning =
@@ -57,7 +62,7 @@ export default function ListItem({ item }: ListItemProps) {
       </View>
       <View style={styles.SpaceFiller}></View>
       <View style={styles.ExpirationDate}>
-        <Text style={styles.ExpirationDateDate}>{item.expirationDate}</Text>
+        <Text style={styles.ExpirationDateDate}>{soonerExpirationDate}</Text>
         <Text
           style={[
             styles.ExpirationDateColoredPart,

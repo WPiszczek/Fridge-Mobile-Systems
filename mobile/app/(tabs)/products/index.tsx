@@ -14,7 +14,7 @@ export default function ProductListScreen() {
       productName: "Nutella",
       expirationDate: "22.05.2023",
       openingDate: "17.05.2023",
-      openExpirationDate: "22.05.2023",
+      openExpirationDate: "20.05.2023",
       quantity: "400g",
       status: "???",
       usagePercentage: "70%",
