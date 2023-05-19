@@ -16,7 +16,7 @@ interface ListItemProps {
     openExpirationDate: string;
     quantity: string;
     status: string;
-    userPercentage: string;
+    usagePercentage: string;
   };
 }
 
@@ -69,7 +69,7 @@ export default function ListItem({ item }: ListItemProps) {
           {` ${days} dni`}
         </Text>
         <Text style={styles.ExpirationDatePercentage}>
-          {item.userPercentage}
+          {item.usagePercentage}
         </Text>
       </View>
     </View>
