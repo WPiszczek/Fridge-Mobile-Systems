@@ -2,14 +2,11 @@ import express, { Express } from "express";
 import session from "express-session";
 import path from "path";
 import cors from "cors";
-import dotenv from "dotenv";
 import ip from "ip";
 import { baseRouter } from "./routes/base.route";
 import { authRouter } from "./routes/auth.route";
 import { userRouter } from "./routes/user.route";
 import { productRouter } from "./routes/product.route";
-
-dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
