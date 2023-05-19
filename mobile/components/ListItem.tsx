@@ -6,17 +6,17 @@ import { Text, View } from "./Themed";
 import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 interface ListItemProps {
   item: {
-    id: number,
-      userId: number,
-      productCode: number,
-      pictureUrl: string,
-      productName: string,
-      expirationDate: string,
-      openingDate: string,
-      openExpirationDate: string,
-      quantity: string,
-      status: string,
-      userPercentage: string,
+    id: number;
+    userId: number;
+    productCode: number;
+    pictureUrl: string;
+    productName: string;
+    expirationDate: string;
+    openingDate: string;
+    openExpirationDate: string;
+    quantity: string;
+    status: string;
+    userPercentage: string;
   };
 }
 
@@ -25,32 +25,25 @@ export default function ListItem({ item }: ListItemProps) {
     parse(item.expirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) -
     new Date().setHours(0, 0, 0, 0);
   let days = Math.ceil(timeBetween / (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
-  console.log(parse(item.expirationDate, "dd.MM.yyyy", new Date()));
-  console.log(new Date());
   let warning =
-    days < 7 ? (
-      days < 5 ? (
+    days < 7 && days > 5 ? (
+      <AntDesign
+        name="exclamationcircleo"
+        style={styles.ExpirationDateWarning}
+        color="orange"
+      />
+    ) : (
+      days < 5 && (
         <AntDesign
           name="warning"
           style={styles.ExpirationDateWarning}
           color="red"
         />
-      ) : (
-        <AntDesign
-          name="exclamationcircleo"
-          style={styles.ExpirationDateWarning}
-          color="orange"
-        />
       )
-    ) : (
-      ""
     );
   return (
     <View style={styles.ListItem}>
-      <Image
-        style={styles.ItemImage}
-        source={{uri: item.pictureUrl}}
-      />
+      <Image style={styles.ItemImage} source={{ uri: item.pictureUrl }} />
       <View style={styles.ListItemDescription}>
         <View style={styles.ListItemDescriptionLeft}>
           <Text style={styles.ItemCode}>{item.productCode.toString()}</Text>
@@ -65,18 +58,26 @@ export default function ListItem({ item }: ListItemProps) {
       <View style={styles.SpaceFiller}></View>
       <View style={styles.ExpirationDate}>
         <Text style={styles.ExpirationDateDate}>{item.expirationDate}</Text>
-        <Text style={[styles.ExpirationDateColoredPart, ]}>
+        <Text
+          style={[
+            styles.ExpirationDateColoredPart,
+            days > 5 && days < 7 ? styles.Orange : days < 5 && styles.Red,
+          ]}
+        >
           {/* {" "} */}
           {warning}
-          {`${days} dni`}
+          {` ${days} dni`}
         </Text>
-        <Text style={styles.ExpirationDatePercentage}>{item.userPercentage}</Text>
+        <Text style={styles.ExpirationDatePercentage}>
+          {item.userPercentage}
+        </Text>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({ //TODO - szerokość 100%
+const styles = StyleSheet.create({
+  //TODO - szerokość 100%
   ListItem: {
     flexDirection: "row",
     width: "100%",
@@ -126,5 +127,11 @@ const styles = StyleSheet.create({ //TODO - szerokość 100%
     fontSize: 12,
   },
   ExpirationDateColoredPart: {}, //TODO - zmiana koloru w zaleznosci od daty
+  Orange: {
+    color: "orange",
+  },
+  Red: {
+    color: "red",
+  },
   ExpirationDatePercentage: {},
 });
