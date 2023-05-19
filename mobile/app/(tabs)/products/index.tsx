@@ -2,9 +2,10 @@ import { ScrollView, StyleSheet } from "react-native";
 import ListItem from "../../../components/ListItem";
 import { ProductSearch } from "../../../components/ProductSearch";
 import { View } from "../../../components/Themed";
+import { useState } from "react";
 
 export default function ProductListScreen() {
-  const items = [
+  const [items, setItems] = useState([
     {
       id: 1,
       userId: 1,
@@ -16,7 +17,7 @@ export default function ProductListScreen() {
       openExpirationDate: "22.05.2023",
       quantity: "400g",
       status: "???",
-      userPercentage: "70%",
+      usagePercentage: "70%",
     },
     {
       id: 1,
@@ -29,9 +30,11 @@ export default function ProductListScreen() {
       openExpirationDate: "22.05.2023",
       quantity: "400g",
       status: "???",
-      userPercentage: "70%",
+      usagePercentage: "90%",
     },
-  ];
+  ]);
+
+  
   return (
     <View style={styles.container}>
       <ProductSearch />
