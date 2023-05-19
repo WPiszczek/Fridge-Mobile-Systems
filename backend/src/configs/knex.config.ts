@@ -1,7 +1,4 @@
 import Knex from "knex";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export const knex = Knex({
   client: "pg",
@@ -10,6 +7,6 @@ export const knex = Knex({
     port: parseInt(process.env.DATABASE_PORT || "5432"),
     user: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE_NAME
-  }
+    database: process.env.DATABASE_NAME,
+  },
 });

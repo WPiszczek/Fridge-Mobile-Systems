@@ -2,11 +2,14 @@
   "name": "mobile",
   "version": "1.0.0",
   "scripts": {
+    "preinstall": "npx -y only-allow pnpm",
     "start": "expo start",
+    "start-clear": "expo start --clear",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "cache": "expo r -c"
   },
   "jest": {
     "preset": "jest-expo"

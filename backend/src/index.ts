@@ -3,10 +3,11 @@ import session from "express-session";
 import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
-import { baseRouter } from "./src/routes/base.route";
-import { authRouter } from "./src/routes/auth.route";
-import { userRouter } from "./src/routes/user.route";
-import { productRouter } from "./src/routes/product.route";
+import ip from "ip";
+import { baseRouter } from "./routes/base.route";
+import { authRouter } from "./routes/auth.route";
+import { userRouter } from "./routes/user.route";
+import { productRouter } from "./routes/product.route";
 
 dotenv.config();
 
@@ -21,16 +22,14 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-      secure: false,
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: false,
       httpOnly: true,
     },
   })
 );
 app.use(
   cors({
-    origin: "http://localhost:19000",
+    origin: ["http://localhost:19000", `http://${ip.address()}:19000`],
     methods: ["POST", "DELETE", "GET", "PATCH"],
     credentials: true,
   })
