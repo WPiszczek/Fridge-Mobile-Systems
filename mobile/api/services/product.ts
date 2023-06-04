@@ -45,7 +45,7 @@ export const useUpdateProduct = () =>
   useMutation({
     mutationKey: ["products"],
     mutationFn: async (data: Product) =>
-      await apiClient.put(`/products/${data.id}`, data),
+      await apiClient.patch(`/products/${data.id}`, data),
     onSuccess: () => {
       Toast.show("Product updated!", {
         duration: Toast.durations.SHORT,
