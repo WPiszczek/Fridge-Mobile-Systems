@@ -10,6 +10,7 @@ POST /api/auth/register
 POST /api/auth/google
 
 GET /api/stats  
+GET /api/tags  
 GET /api/me
 
 GET /api/products  

@@ -75,7 +75,7 @@ const addProduct = async (request, response) => {
         expirationDate: request.body.expirationDate ?? null,
         openingDate: request.body.openingDate ?? null,
         openExpirationDate: request.body.openExpirationDate ?? null
-    })
+    }, request.body.tags)
         .then((result) => {
         const [success, _] = result;
         if (success) {

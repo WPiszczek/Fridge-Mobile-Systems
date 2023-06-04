@@ -64,18 +64,21 @@ const getSingleProduct = async (request: Request, response: Response) => {
 
 const addProduct = async (request: Request, response: Response) => {
   await productService
-    .addProduct({
-      userId: request.session.userId!,
-      productCode: request.body.productCode ?? null,
-      productName: request.body.productName ?? null,
-      pictureUrl: request.body.pictureUrl ?? null,
-      status: request.body.status,
-      quantity: request.body.quantity ?? null,
-      usagePercentage: request.body.usagePercentage ?? null,
-      expirationDate: request.body.expirationDate ?? null,
-      openingDate: request.body.openingDate ?? null,
-      openExpirationDate: request.body.openExpirationDate ?? null
-    })
+    .addProduct(
+      {
+        userId: request.session.userId!,
+        productCode: request.body.productCode ?? null,
+        productName: request.body.productName ?? null,
+        pictureUrl: request.body.pictureUrl ?? null,
+        status: request.body.status,
+        quantity: request.body.quantity ?? null,
+        usagePercentage: request.body.usagePercentage ?? null,
+        expirationDate: request.body.expirationDate ?? null,
+        openingDate: request.body.openingDate ?? null,
+        openExpirationDate: request.body.openExpirationDate ?? null
+      },
+      request.body.tags
+    )
     .then((result) => {
       const [success, _] = result;
       if (success) {
