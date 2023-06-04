@@ -72,9 +72,19 @@ const addProduct = async (product, tags) => {
 };
 const updateProduct = async (product) => {
     const { id, userId, ...rest } = product;
+    const newStatus = rest.status;
     const result = await (0, knex_config_1.knex)("products").where({ id, userId }).update(rest);
     if (result > 0) {
-        return [true, result];
+        const resultStats = await (0, knex_config_1.knex)("stats").insert({
+            productId: id,
+            userId: userId,
+            eaten: newStatus === "eaten",
+            date: new Date().toISOString().slice(0, 10)
+        }, ["id"]);
+        if (resultStats.length > 0) {
+            return [true, result];
+        }
+        return [false, null];
     }
     return [false, null];
 };

@@ -28,7 +28,32 @@ const me = async (request: Request, response: Response) => {
 };
 
 // TODO
-const stats = async (request: Request, response: Response) => {};
+const stats = async (request: Request, response: Response) => {
+  const userId = request.session.userId;
+  const numberOfDays = parseInt(request.params.numberOfDays ?? 30);
+  if (!userId) {
+    response.status(401).json({
+      status: "FAIL",
+      message: "Log in to continue."
+    });
+    return;
+  }
+
+  await userService.getUserStats(userId, numberOfDays).then((result) => {
+    const [success, statsData] = result;
+    if (success) {
+      response.status(200).json({
+        status: "SUCCESS",
+        data: statsData
+      });
+    } else {
+      response.status(500).json({
+        status: "FAIL",
+        message: "Error while getting stats. Try again."
+      });
+    }
+  });
+};
 
 const tags = async (request: Request, response: Response) => {
   const userId = request.session.userId;
