@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import userService from "../services/user.service";
+import userService from "./user.service";
 
 const me = async (request: Request, response: Response) => {
   const userId = request.session.userId;

@@ -1,5 +1,5 @@
 import Express, { Request, Response } from "express";
-import productController from "../controllers/product.controller";
+import productController from "./product.controller";
 import { isAuthenticated } from "../middlewares/sessionAuthentication";
 
 export const productRouter = Express.Router();

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import baseService from "../services/base.service";
+import baseService from "./base.service";
 
 const getBaseResponse = async (request: Request, response: Response) => {
   const responseString: string = baseService.getFromService();

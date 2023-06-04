@@ -7,12 +7,11 @@ const express_1 = __importDefault(require("express"));
 const express_session_1 = __importDefault(require("express-session"));
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
-const dotenv_1 = __importDefault(require("dotenv"));
-const base_route_1 = require("./src/routes/base.route");
-const auth_route_1 = require("./src/routes/auth.route");
-const user_route_1 = require("./src/routes/user.route");
-const product_route_1 = require("./src/routes/product.route");
-dotenv_1.default.config();
+const ip_1 = __importDefault(require("ip"));
+const base_route_1 = require("./base/base.route");
+const auth_route_1 = require("./auth/auth.route");
+const user_route_1 = require("./user/user.route");
+const product_route_1 = require("./product/product.route");
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 const host_url = process.env.HOST_URL;
@@ -22,14 +21,12 @@ app.use((0, express_session_1.default)({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        secure: false,
         maxAge: 24 * 60 * 60 * 1000,
-        sameSite: false,
         httpOnly: true
     }
 }));
 app.use((0, cors_1.default)({
-    origin: "http://localhost:19000",
+    origin: ["http://localhost:19000", `http://${ip_1.default.address()}:19000`],
     methods: ["POST", "DELETE", "GET", "PATCH"],
     credentials: true
 }));

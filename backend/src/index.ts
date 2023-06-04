@@ -3,10 +3,10 @@ import session from "express-session";
 import path from "path";
 import cors from "cors";
 import ip from "ip";
-import { baseRouter } from "./routes/base.route";
-import { authRouter } from "./routes/auth.route";
-import { userRouter } from "./routes/user.route";
-import { productRouter } from "./routes/product.route";
+import { baseRouter } from "./base/base.route";
+import { authRouter } from "./auth/auth.route";
+import { userRouter } from "./user/user.route";
+import { productRouter } from "./product/product.route";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -20,15 +20,15 @@ app.use(
     saveUninitialized: true,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      httpOnly: true,
-    },
+      httpOnly: true
+    }
   })
 );
 app.use(
   cors({
     origin: ["http://localhost:19000", `http://${ip.address()}:19000`],
     methods: ["POST", "DELETE", "GET", "PATCH"],
-    credentials: true,
+    credentials: true
   })
 );
 app.use(express.json());

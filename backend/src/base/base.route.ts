@@ -1,5 +1,5 @@
 import Express, { Request, Response } from "express";
-import baseController from "../controllers/base.controller";
+import baseController from "./base.controller";
 
 export const baseRouter = Express.Router();
 
