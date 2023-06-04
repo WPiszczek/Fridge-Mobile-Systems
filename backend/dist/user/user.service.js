@@ -11,7 +11,15 @@ const getUser = async (userId) => {
     return [false, null];
 };
 const getUserStats = async (userId) => { };
+const getTags = async () => {
+    const result = await (0, knex_config_1.knex)("tags").select("id", "name");
+    if (result.length > 0) {
+        return [true, result];
+    }
+    return [false, null];
+};
 exports.default = {
     getUser,
-    getUserStats
+    getUserStats,
+    getTags
 };

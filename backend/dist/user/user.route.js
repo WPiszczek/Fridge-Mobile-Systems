@@ -12,6 +12,10 @@ exports.userRouter.get("/me", sessionAuthentication_1.isAuthenticated, (request,
     console.log("GET /me");
     user_controller_1.default.me(request, response);
 });
+exports.userRouter.get("/tags", sessionAuthentication_1.isAuthenticated, (request, response) => {
+    console.log("GET /tags");
+    user_controller_1.default.tags(request, response);
+});
 exports.userRouter.get("/stats", sessionAuthentication_1.isAuthenticated, (request, response) => {
     console.log("GET /stats");
     user_controller_1.default.stats(request, response);

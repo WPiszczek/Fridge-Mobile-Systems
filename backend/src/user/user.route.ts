@@ -13,6 +13,15 @@ userRouter.get(
 );
 
 userRouter.get(
+  "/tags",
+  isAuthenticated,
+  (request: Request, response: Response) => {
+    console.log("GET /tags");
+    userController.tags(request, response);
+  }
+);
+
+userRouter.get(
   "/stats",
   isAuthenticated,
   (request: Request, response: Response) => {

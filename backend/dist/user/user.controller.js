@@ -31,7 +31,33 @@ const me = async (request, response) => {
 };
 // TODO
 const stats = async (request, response) => { };
+const tags = async (request, response) => {
+    const userId = request.session.userId;
+    if (!userId) {
+        response.status(401).json({
+            status: "FAIL",
+            message: "Log in to continue."
+        });
+        return;
+    }
+    await user_service_1.default.getTags().then((result) => {
+        const [success, tagsData] = result;
+        if (success) {
+            response.status(200).json({
+                status: "SUCCESS",
+                data: tagsData
+            });
+        }
+        else {
+            response.status(500).json({
+                status: "FAIL",
+                message: "Error while getting tags. Try again."
+            });
+        }
+    });
+};
 exports.default = {
     me,
-    stats
+    stats,
+    tags
 };
