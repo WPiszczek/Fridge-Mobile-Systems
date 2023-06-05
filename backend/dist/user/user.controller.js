@@ -29,7 +29,6 @@ const me = async (request, response) => {
         }
     });
 };
-// TODO
 const stats = async (request, response) => {
     const userId = request.session.userId;
     const numberOfDays = parseInt(request.params.numberOfDays ?? 30);

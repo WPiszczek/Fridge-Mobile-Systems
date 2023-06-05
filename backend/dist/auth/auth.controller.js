@@ -131,7 +131,6 @@ const loginGoogle = async (request, response) => {
     const token = request.body.token;
     await auth_service_1.default.loginGoogle(token).then((result) => {
         const [name, email, picture] = result;
-        // TODO
         // response.json({
         //   status: "SUCCESS",
         //   data: userData
