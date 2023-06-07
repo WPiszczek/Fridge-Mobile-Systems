@@ -123,16 +123,39 @@ const register = async (request: Request, response: Response) => {
     });
 };
 
-// TODO
 const loginGoogle = async (request: Request, response: Response) => {
-  const token = request.body.token;
-  await authService.loginGoogle(token).then((result) => {
-    const [name, email, picture] = result;
-    // response.json({
-    //   status: "SUCCESS",
-    //   data: userData
-    // });
-  });
+  await authService
+    .loginGoogle({
+      googleToken: request.body.googleToken,
+      email: request.body.email,
+      login: request.body.login,
+      firstName: request.body.firstName,
+      lastName: request.body.lastName,
+      pictureUrl: request.body.pictureUrl
+    })
+    .then((result) => {
+      const [success, userId] = result;
+
+      request.session.regenerate((err) => {
+        if (err) console.error(err);
+        request.session.userId = userId;
+
+        request.session.save((err) => {
+          if (err) console.error(err);
+          if (success) {
+            response.status(200).json({
+              status: "SUCCESS",
+              message: "Successful login."
+            });
+          } else {
+            response.status(401).json({
+              status: "FAIL",
+              message: "Invalid token."
+            });
+          }
+        });
+      });
+    });
 };
 
 export default {

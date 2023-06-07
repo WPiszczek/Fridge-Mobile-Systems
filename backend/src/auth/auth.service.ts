@@ -27,15 +27,16 @@ const register = async (userData: User) => {
   return [false, null];
 };
 
-const loginGoogle = async (token: any) => {
-  const client = new OAuth2Client(process.env.OAUTH_CLIENT_ID);
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: process.env.OAUTH_CLIENT_ID
-  });
-
-  const { name, email, picture }: any = ticket.getPayload();
-  return [name, email, picture];
+const loginGoogle = async (userData: any) => {
+  const result = await knex("users").where("googleToken", userData.googleToken);
+  if (result.length > 0) {
+    return [true, result[0].id];
+  }
+  const resultInsert = await knex("users").insert(userData, ["id"]);
+  if (resultInsert.length > 0) {
+    return [true, resultInsert[0].id];
+  }
+  return [false, null];
 };
 
 export default {
