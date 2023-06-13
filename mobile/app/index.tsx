@@ -1,6 +1,7 @@
 import { IOS_ANDROID_BACKEND_URL, WEB_BACKEND_URL } from "@env";
 import { Redirect } from "expo-router";
 import { LogBox } from "react-native";
+import "../lib/reactotron";
 
 LogBox.ignoreLogs(["AxiosError: Request failed with status code 401"]);
 
