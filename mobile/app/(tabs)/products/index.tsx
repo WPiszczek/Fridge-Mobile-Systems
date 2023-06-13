@@ -3,8 +3,8 @@ import ListItem from "../../../components/ListItem";
 import { ProductSearch } from "../../../components/ProductSearch";
 import { Text, View } from "../../../components/Themed";
 import { useState } from "react";
-import { useMe } from "../../../api/services/user";
 import { useProducts } from "../../../api/services/product";
+import { useRefreshOnFocus } from "../../../lib/useRefreshOnFocus";
 
 export default function ProductListScreen() {
   const [items, setItems] = useState([
@@ -20,7 +20,7 @@ export default function ProductListScreen() {
       openExpirationDate: "20.05.2023",
       quantity: "400g",
       status: "???",
-      usagePercentage: "70%"
+      usagePercentage: "70%",
     },
     {
       id: 1,
@@ -34,20 +34,18 @@ export default function ProductListScreen() {
       openExpirationDate: "22.05.2023",
       quantity: "400g",
       status: "???",
-      usagePercentage: "90%"
-    }
+      usagePercentage: "90%",
+    },
   ]);
-  const meResponse = useMe();
-  console.log("useMe", meResponse.data?.data);
-  const productsResponse = useProducts();
-  console.log("useProducts", productsResponse.data?.data);
-  const productsData = productsResponse.data?.data;
-  // useProducts();
+
+  const { data, refetch } = useProducts();
+  useRefreshOnFocus(refetch);
+  console.log("useProducts", data?.data);
 
   return (
     <View style={styles.container}>
       <ProductSearch />
-      {productsData ? (
+      {data ? (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
             <ListItem item={it} key={index} />
@@ -66,10 +64,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    padding: 15
+    padding: 15,
   },
   scroll: {
-    width: "100%"
+    width: "100%",
     // position: "relative",
-  }
+  },
 });
