@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Text } from "react-native";
 import { LoginFormValues, useLogin } from "../api/services/auth";
-import { FormInput } from "../components/FormInput";
+import { PaperFormInput } from "../components/PaperFormInput";
+import { Button, Text } from "react-native-paper";
 
 export const LoginForm: FC = () => {
   const { control, handleSubmit } = useForm<LoginFormValues>();
@@ -11,9 +11,9 @@ export const LoginForm: FC = () => {
 
   return (
     <>
-      <Text>Login</Text>
-      <FormInput control={control} name="login" placeholder="login" />
-      <FormInput
+      <Text variant="headlineMedium">Login</Text>
+      <PaperFormInput control={control} name="login" placeholder="login" />
+      <PaperFormInput
         control={control}
         name="hashedPassword"
         placeholder="password"
@@ -22,9 +22,11 @@ export const LoginForm: FC = () => {
       />
       <Button
         onPress={handleSubmit((data) => login(data))}
-        title="Login"
-        accessibilityLabel="Learn more about this purple button"
-      />
+        accessibilityLabel="Login to your account"
+        mode="contained"
+      >
+        Login
+      </Button>
     </>
   );
 };
