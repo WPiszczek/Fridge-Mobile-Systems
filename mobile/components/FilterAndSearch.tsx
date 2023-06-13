@@ -18,19 +18,24 @@ export default function FilterAndSearch({ props }: FilterAndSearchProps) {
     "background"
   );
 
+  const iconColor = useThemeColor(
+    { light: "#4A5568", dark: "white" },
+    "background"
+  );
+
   return (
     <View style={styles.page}>
       <IconButton
         icon="filter-menu-outline"
         size={20}
         onPress={() => showModal("filter")}
-        iconColor={"white"}
+        iconColor={iconColor}
         containerColor={backgroundColor}
       />
       <IconButton
         icon="sort-alphabetical-ascending"
         size={20}
-        iconColor={"white"}
+        iconColor={iconColor}
         containerColor={backgroundColor}
         onPress={() => showModal("sort")}
       />
@@ -43,6 +48,5 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
   },
-  iButton: {
-  },
+  iButton: {},
 });

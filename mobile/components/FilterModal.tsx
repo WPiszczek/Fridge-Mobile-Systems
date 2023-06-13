@@ -10,15 +10,28 @@ interface FilterModalProps {
   filterProducts: (category: string) => void;
 }
 
-export default function FilterModal({ item, filterProducts }: FilterModalProps) {
+export default function FilterModal({
+  item,
+  filterProducts,
+}: FilterModalProps) {
   const [value, setValue] = useState("");
 
   const filter = (val: string) => (event: any) => {
     filterProducts(val);
   };
 
+  const backgroundColor = useThemeColor(
+    { light: "#FAFAFA", dark: "#0A0A0A" },
+    "background"
+  );
+
+  const uncheckedColor = useThemeColor(
+    { light: "#0A0A0A", dark: "#FAFAFA" },
+    "background"
+  );
+
   return (
-    <View style={styles.page}>
+    <View style={[{ backgroundColor }, styles.page]}>
       <Text style={styles.catHeader}>Okres przydatności do spożycia</Text>
       <SegmentedButtons
         value={value}
@@ -28,30 +41,28 @@ export default function FilterModal({ item, filterProducts }: FilterModalProps) 
           {
             value: "walk",
             label: " < 3",
-            uncheckedColor: "white",
+            uncheckedColor,
             checkedColor: "green",
             onPress: filter("3"),
           },
           {
             value: "train",
             label: " < 5",
-            uncheckedColor: "white",
+            uncheckedColor,
             checkedColor: "green",
             onPress: filter("5"),
           },
           {
             value: "drive",
             label: " all ",
-            uncheckedColor: "white",
+            uncheckedColor,
             checkedColor: "green",
             showSelectedCheck: true,
             onPress: filter("all"),
-            
           },
         ]}
       />
     </View>
-    
   );
 }
 
@@ -61,13 +72,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "#0A0A0A",
     // height: "75%",
     borderRadius: 5,
     paddingVertical: 20,
   },
   segButtons: {
-    backgroundColor: "#0A0A0A",
     color: "red",
     borderRadius: 50,
     width: "80%",

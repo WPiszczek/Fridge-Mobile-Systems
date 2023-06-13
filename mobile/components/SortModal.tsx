@@ -12,7 +12,7 @@ export default function SortModal({ sort, sortasc }: SortModalProps) {
   //   const [value, setValue] = useState("");
   const [sortType, setSortType] = useState([
     { label: "Name", value: "name", checked: false },
-    { label: "Open Date", value: "opendate", checked: false },
+    { label: "Opening Date", value: "opendate", checked: false },
     { label: "Days Left", value: "daysleft", checked: false },
   ]);
 
@@ -47,13 +47,12 @@ export default function SortModal({ sort, sortasc }: SortModalProps) {
     <View style={styles.page}>
       <Text style={styles.catHeader}>Sort by</Text>
       {sortType.map((checkbox, i) => (
-        <View style={styles.checkbox}>
-          <Text style={styles.checkboxHeader}>{checkbox.label}</Text>
-          <Checkbox
-            status={checkbox.checked ? "checked" : "unchecked"}
-            onPress={() => checkboxHandler(checkbox.value, i)}
-          />
-        </View>
+        <Checkbox.Item
+          style={{ width: "100%" }}
+          label={checkbox.label}
+          status={checkbox.checked ? "checked" : "unchecked"}
+          onPress={() => checkboxHandler(checkbox.value, i)}
+        />
       ))}
       <Text style={styles.catHeader}>Sort ascending</Text>
       <Switch value={ascendind} onValueChange={onToggleSwitch} />
@@ -67,16 +66,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "#0A0A0A",
     borderRadius: 5,
     paddingVertical: 20,
-  },
-  checkbox: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  checkboxHeader: {
-    fontSize: 10,
   },
   catHeader: {
     paddingVertical: 5,
