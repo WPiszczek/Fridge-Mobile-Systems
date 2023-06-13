@@ -2,7 +2,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import ListItem from "../../../components/ListItem";
 import { ProductSearch } from "../../../components/ProductSearch";
 import { Text, View } from "../../../components/Themed";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProducts } from "../../../api/services/product";
 import { useRefreshOnFocus } from "../../../lib/useRefreshOnFocus";
 import FilterAndSearch from "../../../components/FilterAndSearch";
@@ -11,40 +11,12 @@ import FilterModal from "../../../components/FilterModal";
 import SortModal from "../../../components/SortModal";
 
 export default function ProductListScreen() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      userId: 1,
-      productCode: 3017620422003,
-      pictureUrl:
-        "https://image.ceneostatic.pl/data/products/53886561/f-nutella-krem-czekoladowy-orzechowy-750g.jpg",
-      productName: "Nutella",
-      expirationDate: "22.05.2023",
-      openingDate: "17.05.2023",
-      openExpirationDate: "20.05.2023",
-      quantity: "400g",
-      status: "???",
-      usagePercentage: "70%",
-    },
-    {
-      id: 1,
-      userId: 1,
-      productCode: 3017620422003,
-      pictureUrl:
-        "https://image.ceneostatic.pl/data/products/53886561/f-nutella-krem-czekoladowy-orzechowy-750g.jpg",
-      productName: "Nutella",
-      expirationDate: "25.05.2023",
-      openingDate: "25.05.2023",
-      openExpirationDate: "22.05.2023",
-      quantity: "400g",
-      status: "???",
-      usagePercentage: "90%",
-    },
-  ]);
+  const [items, setItems] = useState([]);
 
   const { data, refetch } = useProducts();
   useRefreshOnFocus(refetch);
   console.log("useProducts", data?.data);
+  
 
   const [visibleFilters, setVisibleFilters] = useState(false);
   const showFilters = () => setVisibleFilters(true);

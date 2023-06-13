@@ -10,7 +10,10 @@ interface FilterModalProps {
   filterProducts: (category: string) => void;
 }
 
-export default function FilterModal({ item, filterProducts }: FilterModalProps) {
+export default function FilterModal({
+  item,
+  filterProducts,
+}: FilterModalProps) {
   const [value, setValue] = useState("");
 
   const filter = (val: string) => (event: any) => {
@@ -46,12 +49,12 @@ export default function FilterModal({ item, filterProducts }: FilterModalProps) 
             checkedColor: "green",
             showSelectedCheck: true,
             onPress: filter("all"),
-            
           },
         ]}
       />
+      <Text style={styles.catHeader}>Kategoria</Text>
+      {/* TODO dodać kategorie jako checkboxy, bo segment się wywala */}
     </View>
-    
   );
 }
 
