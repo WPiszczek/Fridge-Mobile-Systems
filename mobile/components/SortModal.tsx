@@ -48,7 +48,8 @@ export default function SortModal({ sort, sortasc }: SortModalProps) {
       <Text style={styles.catHeader}>Sort by</Text>
       {sortType.map((checkbox, i) => (
         <Checkbox.Item
-          style={{ width: "100%" }}
+          key={checkbox.label}
+          style={styles.checkboxItem}
           label={checkbox.label}
           status={checkbox.checked ? "checked" : "unchecked"}
           onPress={() => checkboxHandler(checkbox.value, i)}
@@ -61,6 +62,9 @@ export default function SortModal({ sort, sortasc }: SortModalProps) {
 }
 
 const styles = StyleSheet.create({
+  checkboxItem: {
+    width: "100%",
+  },
   page: {
     width: "90%",
     alignSelf: "center",
