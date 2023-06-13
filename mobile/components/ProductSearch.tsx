@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Link, useRouter, useSearchParams } from "expo-router";
-import { Pressable, StyleSheet, View } from "react-native";
-import { Input } from "./Input";
+import { useRouter, useSearchParams } from "expo-router";
+import { StyleSheet } from "react-native";
+import { TextInput } from "react-native-paper";
 
 interface Params {
   [key: string]: string | string[];
@@ -13,40 +13,32 @@ export const ProductSearch = () => {
   const { searchQuery } = useSearchParams<Params>();
 
   return (
-    <Input
+    <TextInput
       value={searchQuery}
       onChangeText={(text) => router.setParams({ searchQuery: text })}
-      placeholder="Search product"
-      before={
-        <View style={styles.icon}>
-          <MaterialCommunityIcons name="magnify" size={24} color="#3c3c3c" />
-        </View>
+      label="Search product"
+      style={styles.searchInput}
+      mode="outlined"
+      left={
+        <TextInput.Icon
+          icon={(props) => <MaterialCommunityIcons name="magnify" {...props} />}
+          forceTextInputFocus
+        />
       }
-      after={
-        <Link
-          href="products/product-search-scanner"
-          asChild
-          style={styles.icon}
-        >
-          <Pressable>
-            <MaterialCommunityIcons
-              name="barcode-scan"
-              size={24}
-              color="#3c3c3c"
-            />
-          </Pressable>
-        </Link>
+      right={
+        <TextInput.Icon
+          icon={(props) => (
+            <MaterialCommunityIcons name="barcode-scan" {...props} />
+          )}
+          onPress={() => router.push("products/product-search-scanner")}
+        />
       }
     />
   );
 };
 
 const styles = StyleSheet.create({
-  icon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 99,
-    aspectRatio: 1,
+  searchInput: {
+    width: "100%",
   },
 });

@@ -36,11 +36,11 @@ export default function ProductListScreen() {
 
   const filterProducts = (category: string) => {
     console.log(category);
-  }
+  };
 
   const sortProducts = (by: string) => {
     console.log(by);
-  }
+  };
 
   const sortDirection = (asc: boolean) => {
     console.log(asc ? "Rosnąco" : "Malejąco");
@@ -49,7 +49,7 @@ export default function ProductListScreen() {
   return (
     <View style={styles.container}>
       <ProductSearch />
-      {data && <FilterAndSearch props={{ showFilterAndSort: showFilterAndSort }} />}
+      {data && <FilterAndSearch props={{ showFilterAndSort }} />}
       {data ? (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
@@ -64,14 +64,14 @@ export default function ProductListScreen() {
         onDismiss={hideFilters}
         contentContainerStyle={styles.modal}
       >
-        <FilterModal item={{ xD: 3 }} filterProducts={filterProducts}/>
+        <FilterModal item={{ xD: 3 }} filterProducts={filterProducts} />
       </Modal>
       <Modal
         visible={visibleSort}
         onDismiss={hideSort}
         contentContainerStyle={styles.modal}
       >
-        <SortModal sort={sortProducts} sortasc={sortDirection}/>
+        <SortModal sort={sortProducts} sortasc={sortDirection} />
       </Modal>
     </View>
   );

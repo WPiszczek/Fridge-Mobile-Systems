@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { queryClient } from "../api/clients";
+import { PaperProvider } from "react-native-paper";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -38,16 +39,16 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
   return (
-    <>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <QueryClientProvider client={queryClient}>
-          <RootSiblingParent>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <QueryClientProvider client={queryClient}>
+        <RootSiblingParent>
+          <PaperProvider>
             <Stack>
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
             </Stack>
-          </RootSiblingParent>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </>
+          </PaperProvider>
+        </RootSiblingParent>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
