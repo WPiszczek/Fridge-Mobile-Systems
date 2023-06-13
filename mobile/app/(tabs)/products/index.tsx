@@ -51,15 +51,21 @@ export default function ProductListScreen() {
   return (
     <View style={styles.container}>
       <ProductSearch />
-      {data && <FilterAndSearch props={{ showFilterAndSort }} />}
-      {data ? (
+      {items && <FilterAndSearch props={{ showFilterAndSort }} />}
+      {data && items.length === 0 && (
+        <View style={styles.centeredContainer}>
+          <Text>You have no products.</Text>
+        </View>
+      )}
+      {data && items.length > 0 && (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
             <ListItem item={it} key={index} />
           ))}
         </ScrollView>
-      ) : (
-        <View style={styles.loginButtonContainer}>
+      )}
+      {!data && (
+        <View style={styles.centeredContainer}>
           <Button mode="elevated" onPress={() => router.push("/account/login")}>
             Log in, to browse your products
           </Button>
@@ -93,7 +99,7 @@ const styles = StyleSheet.create({
   scroll: {
     width: "100%",
   },
-  loginButtonContainer: {
+  centeredContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
