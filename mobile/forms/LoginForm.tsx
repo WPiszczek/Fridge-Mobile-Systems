@@ -7,7 +7,7 @@ import { Button, Text } from "react-native-paper";
 export const LoginForm: FC = () => {
   const { control, handleSubmit } = useForm<LoginFormValues>();
 
-  const { mutate: login } = useLogin();
+  const { mutate: login, status } = useLogin();
 
   return (
     <>
@@ -24,6 +24,8 @@ export const LoginForm: FC = () => {
         onPress={handleSubmit((data) => login(data))}
         accessibilityLabel="Login to your account"
         mode="contained"
+        loading={status === "loading"}
+        disabled={status === "loading" || status === "success"}
       >
         Login
       </Button>

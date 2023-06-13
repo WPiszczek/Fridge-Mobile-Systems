@@ -6,7 +6,7 @@ import { Button, Text } from "react-native-paper";
 export const RegisterForm = () => {
   const { control, handleSubmit } = useForm<RegisterFormValues>();
 
-  const { mutate: register } = useRegister();
+  const { mutate: register, status } = useRegister();
 
   return (
     <>
@@ -34,6 +34,8 @@ export const RegisterForm = () => {
         onPress={handleSubmit((data) => register(data))}
         accessibilityLabel="Register your account"
         mode="contained"
+        loading={status === "loading"}
+        disabled={status === "loading" || status === "success"}
       >
         Register
       </Button>
