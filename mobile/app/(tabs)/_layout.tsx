@@ -36,7 +36,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="scanner"
         options={{
-          title: "Scan",
+          title: "Scan your product",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="barcode-scan"

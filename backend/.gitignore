@@ -1,6 +1,7 @@
 .cache/
 .vscode/
 # dist/
+dist/.tsbuildinfo
 node_modules/
 .env
 .DS_Store
