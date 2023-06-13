@@ -12,42 +12,50 @@ export default function ProductListScreen() {
       id: 1,
       userId: 1,
       productCode: 3017620422003,
-      pictureUrl: "https://image.ceneostatic.pl/data/products/53886561/f-nutella-krem-czekoladowy-orzechowy-750g.jpg",
+      pictureUrl:
+        "https://image.ceneostatic.pl/data/products/53886561/f-nutella-krem-czekoladowy-orzechowy-750g.jpg",
       productName: "Nutella",
       expirationDate: "22.05.2023",
       openingDate: "17.05.2023",
       openExpirationDate: "20.05.2023",
       quantity: "400g",
       status: "???",
-      usagePercentage: "70%",
+      usagePercentage: "70%"
     },
     {
       id: 1,
       userId: 1,
       productCode: 3017620422003,
-      pictureUrl: "https://image.ceneostatic.pl/data/products/53886561/f-nutella-krem-czekoladowy-orzechowy-750g.jpg",
+      pictureUrl:
+        "https://image.ceneostatic.pl/data/products/53886561/f-nutella-krem-czekoladowy-orzechowy-750g.jpg",
       productName: "Nutella",
       expirationDate: "25.05.2023",
       openingDate: "25.05.2023",
       openExpirationDate: "22.05.2023",
       quantity: "400g",
       status: "???",
-      usagePercentage: "90%",
-    },
+      usagePercentage: "90%"
+    }
   ]);
-  const { data } = useMe();
-  console.log(data);
-  console.log(useProducts());
+  const meResponse = useMe();
+  console.log("useMe", meResponse.data?.data);
+  const productsResponse = useProducts();
+  console.log("useProducts", productsResponse.data?.data);
+  const productsData = productsResponse.data?.data;
   // useProducts();
-  
+
   return (
     <View style={styles.container}>
       <ProductSearch />
-      {data ? <ScrollView style={styles.scroll}>
-        {items.map((it, index) => (
-          <ListItem item={it} key={index} />
-        ))}
-      </ScrollView> : <Text>Zaloguj się, aby przeglądać produkty</Text>}
+      {productsData ? (
+        <ScrollView style={styles.scroll}>
+          {items.map((it, index) => (
+            <ListItem item={it} key={index} />
+          ))}
+        </ScrollView>
+      ) : (
+        <Text>Zaloguj się, aby przeglądać produkty</Text>
+      )}
       {/* <ListItem item={item} /> */}
     </View>
   );
@@ -58,10 +66,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    padding: 15,
+    padding: 15
   },
   scroll: {
-    width: "100%",
+    width: "100%"
     // position: "relative",
-  },
+  }
 });
