@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { apiClient } from "../clients";
 import Toast from "react-native-root-toast";
+import { apiClient, handleError } from "../clients";
+import { AxiosError } from "axios";
 
 export type EAN = string;
 export interface Product {
@@ -21,6 +22,11 @@ export const useProducts = () =>
   useQuery({
     queryKey: ["products"],
     queryFn: () => apiClient.get("/products"),
+    onError: (error) => {
+      if ((error as AxiosError).response?.status !== 401) {
+        handleError(error);
+      }
+    },
   });
 
 export const useProduct = (id: number) =>

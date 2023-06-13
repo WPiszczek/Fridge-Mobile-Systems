@@ -1,8 +1,10 @@
 import { ScrollView, StyleSheet } from "react-native";
 import ListItem from "../../../components/ListItem";
 import { ProductSearch } from "../../../components/ProductSearch";
-import { View } from "../../../components/Themed";
+import { Text, View } from "../../../components/Themed";
 import { useState } from "react";
+import { useMe } from "../../../api/services/user";
+import { useProducts } from "../../../api/services/product";
 
 export default function ProductListScreen() {
   const [items, setItems] = useState([
@@ -33,16 +35,19 @@ export default function ProductListScreen() {
       usagePercentage: "90%",
     },
   ]);
-
+  const { data } = useMe();
+  console.log(data);
+  console.log(useProducts());
+  // useProducts();
   
   return (
     <View style={styles.container}>
       <ProductSearch />
-      <ScrollView style={styles.scroll}>
+      {data ? <ScrollView style={styles.scroll}>
         {items.map((it, index) => (
           <ListItem item={it} key={index} />
         ))}
-      </ScrollView>
+      </ScrollView> : <Text>Zaloguj się, aby przeglądać produkty</Text>}
       {/* <ListItem item={item} /> */}
     </View>
   );

@@ -18,7 +18,6 @@ export default function MenuButton({ buttonValues }: MenuButtonProps) {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   const { mutate: logout } = useLogout();
-  const { data } = useMe();
 
 
   return (
