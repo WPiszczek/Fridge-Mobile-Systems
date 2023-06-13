@@ -5,6 +5,8 @@ import { Text, View } from "../../../components/Themed";
 import { useState } from "react";
 import { useProducts } from "../../../api/services/product";
 import { useRefreshOnFocus } from "../../../lib/useRefreshOnFocus";
+import FilterAndSearch from "../../../components/FilterAndSearch";
+import { Modal } from "react-native-paper";
 
 export default function ProductListScreen() {
   const [items, setItems] = useState([
@@ -42,9 +44,14 @@ export default function ProductListScreen() {
   useRefreshOnFocus(refetch);
   console.log("useProducts", data?.data);
 
+  const showModal = (which: string) => {
+    console.log(which);
+};
+
   return (
     <View style={styles.container}>
       <ProductSearch />
+      <FilterAndSearch props={{showModal}}/>
       {data ? (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
