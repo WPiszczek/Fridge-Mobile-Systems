@@ -1,9 +1,11 @@
-import { Button, StyleSheet, ScrollView } from "react-native";
-import { View, Text } from "./Themed";
+import { StyleSheet } from "react-native";
+import { View } from "./Themed";
 import MenuButton from "./MenuButton";
+import { useLogout } from "../api/services/auth";
 
 export default function MenuScreen() {
-  
+  const { mutate: logout } = useLogout();
+
   return (
     <View style={styles.container}>
       <MenuButton
@@ -19,7 +21,8 @@ export default function MenuScreen() {
         buttonValues={{ name: "Statystyki", type: "icon", value: false }}
       />
       <MenuButton
-        buttonValues={{ name: "Wyloguj", type: "logout", value: false}}
+        onPress={() => logout()}
+        buttonValues={{ name: "Wyloguj", type: "logout", value: false }}
       />
     </View>
   );
@@ -28,8 +31,8 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection:"column",
-    justifyContent:"space-around",
+    flexDirection: "column",
+    justifyContent: "space-around",
     paddingVertical: 40,
     width: "100%",
   },

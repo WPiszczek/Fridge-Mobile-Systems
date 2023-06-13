@@ -37,7 +37,7 @@ export const useLogout = () =>
     mutationKey: ["logout"],
     mutationFn: async () => await apiClient.post("/auth/logout"),
     onSuccess: () => {
-      queryClient.clear();
+      queryClient.resetQueries();
       Toast.show("You have successfully logged out!", {
         duration: Toast.durations.SHORT,
       });
