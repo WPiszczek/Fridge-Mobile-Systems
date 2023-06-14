@@ -24,16 +24,14 @@ export default function ListItem({ item, eatItem }: ListItemProps) {
   let url = item.pictureUrl != null ? item.pictureUrl : "";
   let expDate = parse(maxDate, "yyyy-MM-dd", new Date());
   let opExpDate = parse(maxDate, "yyyy-MM-dd", new Date());
-  let soonerExpirationDate =expDate < opExpDate
-      ? expDate
-      : opExpDate;
+  let soonerExpirationDate = expDate < opExpDate ? expDate : opExpDate;
 
   // let parsedSoonerExpDate = so
 
   // let timeBetween =
   //   parse(soonerExpirationDate, "yyyy-MM-dd", new Date()).setHours(0, 0, 0, 0) -
   //   new Date().setHours(0, 0, 0, 0);
-  let days = differenceInCalendarDays(soonerExpirationDate, new Date());// TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
+  let days = differenceInCalendarDays(soonerExpirationDate, new Date()); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
   let warning =
     days < 7 && days > 5 ? (
       <AntDesign
@@ -53,7 +51,7 @@ export default function ListItem({ item, eatItem }: ListItemProps) {
   return (
     <TouchableOpacity onPress={showModal}>
     <View style={styles.ListItem}>
-      <Image style={styles.ItemImage} source={{ uri: url }} />
+      {url && <Image style={styles.ItemImage} source={{ uri: url }} />}
       <View style={styles.ListItemDescription}>
         <View style={styles.ListItemDescriptionLeft}>
           <Text style={styles.ItemCode}>{item.productCode}</Text>
@@ -66,7 +64,11 @@ export default function ListItem({ item, eatItem }: ListItemProps) {
         </View>
       </View>
       <View style={styles.ExpirationDate}>
-        <Text style={styles.ExpirationDateDate}>{getYear(soonerExpirationDate) === 9999 ? "Set expiration date" : format(soonerExpirationDate, "yyyy-MM-dd")}</Text>
+        <Text style={styles.ExpirationDateDate}>
+          {getYear(soonerExpirationDate) === 9999
+            ? "Set expiration date"
+            : format(soonerExpirationDate, "yyyy-MM-dd")}
+        </Text>
         <Text
           style={[
             styles.ExpirationDateColoredPart,
@@ -75,7 +77,9 @@ export default function ListItem({ item, eatItem }: ListItemProps) {
         >
           {/* {" "} */}
           {warning}
-          {getYear(soonerExpirationDate) === 9999 ?"Set exp date" : ` ${days} dni`}
+          {getYear(soonerExpirationDate) === 9999
+            ? "Set exp date"
+            : ` ${days} dni`}
         </Text>
         <Text style={styles.ExpirationDatePercentage}>
           {item.usagePercentage}
