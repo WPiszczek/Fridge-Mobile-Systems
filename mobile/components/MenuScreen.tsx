@@ -4,6 +4,8 @@ import { MenuButton } from "./MenuButton";
 import { useLogout } from "../api/services/auth";
 import { ActivityIndicator, Button, Switch, Text } from "react-native-paper";
 import { useMe } from "../api/services/user";
+import { parse } from "date-fns";
+import { Product, EAN } from "../api/services/product";
 import {
   useCallback,
   useMemo,
@@ -11,6 +13,7 @@ import {
   Dispatch,
   SetStateAction,
 } from "react";
+import { useProducts} from "../api/services/product";
 import { setLocalDarkMode, useLocalDarkMode } from "../api/services/misc";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TimePickerModal } from "react-native-paper-dates";
@@ -50,37 +53,49 @@ Notifications.setNotificationHandler({
   }),
 });
 
+const getShortPeriodProducts = (data: Product[] | undefined) => {
+  if(data){
+    let weekFromNow = new Date(new Date().setDate(new Date().getDate() + 7));
+    let shortPeriod = data.filter(el => weekFromNow >  new Date(el.expirationDate ?? "9999-12-31")).map(el => el.productName);
+    return `Products you should eat in this week: ${shortPeriod.join(", ")}`
+  } else {
+    return "Nothing to save!";
+  }
+}
+
 async function schedulePushNotification(notificationTime: {
   hours: number;
   minutes: number;
-}) {
+}, data: Product[] | undefined) {
   requestPermissionsAsync();
   const settings = await Notifications.getPermissionsAsync();
-  console.log(settings);
+
   let trigger = {
     hour: notificationTime.hours,
     minute: notificationTime.minutes,
     repeats: true,
   };
-
+  getShortPeriodProducts(data);
   Notifications.scheduleNotificationAsync({
     content: {
       title: "Save Your food!",
-      body: "Here is the notification body",
+      body: getShortPeriodProducts(data),
     },
     trigger,
   });
 }
 
 const NotificationButton = ({
+  data,
   notificationTime,
 }: {
+  data: Product[] | undefined;
   notificationTime: { hours: number; minutes: number };
 }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const handlePress = () => {
-    schedulePushNotification(notificationTime);
+    schedulePushNotification(notificationTime, data);
   };
 
   return (
@@ -89,7 +104,7 @@ const NotificationButton = ({
         onValueChange={(value) => {
           toggleSwitch();
           if (value) {
-            schedulePushNotification(notificationTime);
+            schedulePushNotification(notificationTime, data);
           } else {
             Notifications.cancelAllScheduledNotificationsAsync();
           }
@@ -103,11 +118,13 @@ const NotificationButton = ({
 const NotificationHourButton = ({
   setNotificationTime,
   notificationTime,
+  data,
 }: {
   setNotificationTime: Dispatch<
     SetStateAction<{ hours: number; minutes: number }>
   >;
   notificationTime: { hours: number; minutes: number };
+  data: Product[] | undefined;
 }) => {
   const [visible, setVisible] = useState(false);
   const onDismiss = useCallback(() => {
@@ -121,9 +138,11 @@ const NotificationHourButton = ({
 
   const onConfirm = useCallback(
     ({ hours, minutes }: { hours: number; minutes: number }) => {
+      Notifications.cancelAllScheduledNotificationsAsync();
+      schedulePushNotification({ hours, minutes }, data);
       setNotificationTime({ hours, minutes });
       setVisible(false);
-      console.log({ hours, minutes });
+      // console.log({ hours, minutes });
     },
     [setVisible]
   );
@@ -209,13 +228,15 @@ export default function MenuScreen() {
     hours: 0,
     minutes: 0,
   });
+  const { data } = useProducts();
   return (
     <View style={styles.container}>
       <NightModeButton />
-      <NotificationButton notificationTime={notificationTime} />
+      <NotificationButton notificationTime={notificationTime} data={data}/>
       <NotificationHourButton
         notificationTime={notificationTime}
         setNotificationTime={setNotificationTime}
+        data={data}
       />
       <StatisticsButton />
       <LogoutButton />
