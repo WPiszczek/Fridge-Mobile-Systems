@@ -1,41 +1,24 @@
 import React from "react";
-import { parse } from "date-fns";
+import { differenceInCalendarDays, format, parse, parseISO } from "date-fns";
 import { StyleSheet, Image } from "react-native";
 import { Text, View } from "./Themed";
 import { AntDesign } from "@expo/vector-icons";
+import { Product } from "../api/services/product";
 
 interface ListItemProps {
-  item: {
-    id: number;
-    userId: number;
-    productCode: string;
-    productName: string;
-    quantity: string;
-    pictureUrl: string;
-    status: string;
-    usagePercentage: string;
-    expirationDate: string;
-    openingDate: string;
-    openExpirationDate: string;
-    tags: {id: number, name: string}[]
-  };
+  item: Product;
 }
 
+let maxDate = "9999-99-99";
+
 export default function ListItem({ item }: ListItemProps) {
-  let soonerExpirationDate =
-    parse(item.expirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) <
-    parse(item.openExpirationDate, "dd.MM.yyyy", new Date()).setHours(
-      0,
-      0,
-      0,
-      0
-    )
-      ? item.expirationDate
-      : item.openExpirationDate;
-  let timeBetween =
-    parse(soonerExpirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) -
-    new Date().setHours(0, 0, 0, 0);
-  let days = Math.ceil(timeBetween / (1000 * 3600 * 24)); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
+  let url = item.pictureUrl != null ? item.pictureUrl : "";
+  let expDate = parse(item.expirationDate ?? maxDate, "yyyy-MM-dd", new Date());
+  let opExpDate = parse(item.openExpirationDate ?? maxDate, "yyyy-MM-dd", new Date());
+  let soonerExpirationDate =expDate < opExpDate
+      ? expDate
+      : opExpDate;
+  let days = differenceInCalendarDays(soonerExpirationDate, new Date());// TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
   let warning =
     days < 7 && days > 5 ? (
       <AntDesign
@@ -54,10 +37,10 @@ export default function ListItem({ item }: ListItemProps) {
     );
   return (
     <View style={styles.ListItem}>
-      <Image style={styles.ItemImage} source={{ uri: item.pictureUrl }} />
+      <Image style={styles.ItemImage} source={{ uri: url }} />
       <View style={styles.ListItemDescription}>
         <View style={styles.ListItemDescriptionLeft}>
-          <Text style={styles.ItemCode}>{item.productCode.toString()}</Text>
+          <Text style={styles.ItemCode}>{item.productCode}</Text>
           <Text style={styles.ItemName}>{item.productName}</Text>
           <Text style={styles.ItemAmount}>{item.quantity}</Text>
         </View>
@@ -68,7 +51,7 @@ export default function ListItem({ item }: ListItemProps) {
       </View>
       <View style={styles.SpaceFiller}></View>
       <View style={styles.ExpirationDate}>
-        <Text style={styles.ExpirationDateDate}>{soonerExpirationDate}</Text>
+        <Text style={styles.ExpirationDateDate}>{format(soonerExpirationDate, "yyyy-MM-dd")}</Text>
         <Text
           style={[
             styles.ExpirationDateColoredPart,

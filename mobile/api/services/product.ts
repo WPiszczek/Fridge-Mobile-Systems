@@ -7,23 +7,23 @@ import { ApiResponse } from "../types";
 
 export type EAN = string;
 export interface Product {
-  id?: number;
+  id: number;
   userId: number;
-  productCode?: EAN;
-  pictureUrl?: string;
-  productName?: string;
-  quantity?: string;
+  productCode: EAN | null;
+  pictureUrl: string | null;
+  productName: string | null;
+  quantity: string | null;
   status: string;
-  usagePercentage?: string;
-  expirationDate?: string;
-  openingDate?: string;
-  openExpirationDate?: string;
+  usagePercentage: string | null;
+  expirationDate: string | null;
+  openingDate: string | null;
+  openExpirationDate: string | null;
 }
 
 export const useProducts = () =>
   useQuery({
     queryKey: ["products"],
-    queryFn: () => apiClient.get<ApiResponse<Product>>("/products"),
+    queryFn: () => apiClient.get<ApiResponse<Product[]>>("/products"),
     onError: (error) => {
       if ((error as AxiosError).response?.status !== 401) {
         handleError(error);
