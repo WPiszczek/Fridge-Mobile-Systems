@@ -8,7 +8,7 @@ import { useColorScheme } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { queryClient } from "../api/clients";
 import { PaperProvider } from "react-native-paper";
-import { CombinedDarkTheme, CombinedDefaultTheme } from "../lib/theme";
+import { CombinedDarkTheme, CombinedDefaultTheme } from "../theme/themes";
 
 export { ErrorBoundary } from "expo-router";
 

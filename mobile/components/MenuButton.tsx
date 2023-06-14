@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { StyleSheet, Switch, TouchableOpacity } from "react-native";
-import { Text, View, useThemeColor } from "../components/Themed";
+import { Text, View } from "../components/Themed";
+import { useTheme } from "../theme/utils";
 
 interface MenuButtonProps {
   onPress?: () => void;
@@ -15,21 +16,19 @@ export default function MenuButton({ onPress, buttonValues }: MenuButtonProps) {
   const [isEnabled, setIsEnabled] = useState(buttonValues.value);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
-  const backgroundColor = useThemeColor(
-    { light: "#FAFAFA", dark: "#0A0A0A" },
-    "background"
-  );
+  const theme = useTheme();
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={[{ backgroundColor }, styles.WholeButton]}>
+      <View
+        style={[
+          { backgroundColor: theme.colors.elevation.level1 },
+          styles.WholeButton,
+        ]}
+      >
         <Text style={styles.ButtonText}>{buttonValues.name}</Text>
         {buttonValues.type === "switch" ? (
-          <Switch
-            trackColor={{ false: "#192424", true: "#435F60" }}
-            onValueChange={toggleSwitch}
-            value={isEnabled}
-          />
+          <Switch onValueChange={toggleSwitch} value={isEnabled} />
         ) : buttonValues.type === "time" ? (
           <Text>"TIME"</Text>
         ) : (
@@ -46,7 +45,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     width: "100%",
-    // padding: 20,
     paddingHorizontal: 10,
     height: 55,
     borderRadius: 8,

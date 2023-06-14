@@ -1,15 +1,4 @@
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-} from "@react-navigation/native";
-import {
-  MD3DarkTheme,
-  MD3LightTheme,
-  adaptNavigationTheme,
-} from "react-native-paper";
-import merge from "deepmerge";
-
-const GreenDefaultColors = {
+export const GreenDefaultColors = {
   primary: "rgb(16, 109, 32)",
   onPrimary: "rgb(255, 255, 255)",
   primaryContainer: "rgb(157, 248, 152)",
@@ -52,7 +41,7 @@ const GreenDefaultColors = {
   backdrop: "rgba(44, 50, 42, 0.4)",
 };
 
-const GreenDarkColors = {
+export const GreenDarkColors = {
   primary: "rgb(130, 219, 126)",
   onPrimary: "rgb(0, 57, 10)",
   primaryContainer: "rgb(0, 83, 18)",
@@ -94,29 +83,3 @@ const GreenDarkColors = {
   onSurfaceDisabled: "rgba(226, 227, 221, 0.38)",
   backdrop: "rgba(44, 50, 42, 0.4)",
 };
-
-export const MD3GreenLight = {
-  ...MD3LightTheme,
-  colors: {
-    ...MD3LightTheme.colors,
-    ...GreenDefaultColors,
-  },
-};
-
-const MD3GreenDark = {
-  ...MD3DarkTheme,
-  colors: {
-    ...MD3DarkTheme.colors,
-    ...GreenDarkColors,
-  },
-};
-
-const { LightTheme, DarkTheme } = adaptNavigationTheme({
-  reactNavigationLight: NavigationDefaultTheme,
-  reactNavigationDark: NavigationDarkTheme,
-  materialLight: MD3GreenLight,
-  materialDark: MD3GreenDark,
-});
-
-export const CombinedDefaultTheme = merge(MD3GreenLight, LightTheme);
-export const CombinedDarkTheme = merge(MD3GreenDark, DarkTheme);

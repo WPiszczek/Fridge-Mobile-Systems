@@ -1,7 +1,7 @@
-import { View, Text, useThemeColor } from "./Themed";
+import { View, Text } from "./Themed";
 import { StyleSheet } from "react-native";
 import { useState } from "react";
-import { Checkbox, SegmentedButtons, Switch } from "react-native-paper";
+import { Checkbox, Switch } from "react-native-paper";
 
 interface SortModalProps {
   sort: (category: string) => void;
