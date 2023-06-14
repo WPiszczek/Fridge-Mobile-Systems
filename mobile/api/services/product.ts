@@ -5,11 +5,7 @@ import { AxiosError } from "axios";
 import { extractData } from "../utils";
 import { ApiResponse } from "../types";
 import { useRouter } from "expo-router";
-
-interface Tag {
-  id?: number;
-  name: string;
-}
+import { CreateTag } from "./tags";
 
 export type EAN = string;
 export interface Product {
@@ -32,7 +28,7 @@ export interface CreateProduct {
   productName: string | null;
   status: string;
   expirationDate: string | null;
-  tags: Tag[];
+  tags: CreateTag[];
 }
 
 export const useProducts = () =>

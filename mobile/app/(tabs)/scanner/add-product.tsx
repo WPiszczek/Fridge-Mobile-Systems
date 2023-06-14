@@ -2,12 +2,13 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import { StyleSheet, Image } from "react-native";
 import { useForm } from "react-hook-form";
 import { PaperFormInput } from "../../../components/PaperFormInput";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "../../../components/Themed";
-import { Button, Text } from "react-native-paper";
+import { Button, Chip, Text, TextInput } from "react-native-paper";
 import { useOpenFoodFactsProduct } from "../../../api/services/openFoodFacts";
 import { CreateProduct, useCreateProduct } from "../../../api/services/product";
 import { PaperDateInput } from "../../../components/PaperDateInput";
+import { CreateTag, useTags } from "../../../api/services/tags";
 
 const AddProduct = () => {
   const navigation = useNavigation();
@@ -21,7 +22,7 @@ const AddProduct = () => {
       productName: "",
       pictureUrl: "",
       status: "exists",
-      tags: [{ name: "food" }],
+      tags: [],
     },
   });
 
@@ -37,6 +38,23 @@ const AddProduct = () => {
   }, [product]);
 
   const pictureUrl = watch("pictureUrl");
+
+  const [tagName, setTagName] = useState<string>("");
+
+  const { data: tags } = useTags();
+  const [newTags, setNewTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const allTags: CreateTag[] = [
+    ...(tags ?? []),
+    ...newTags.map((tag) => ({ name: tag })),
+  ];
+
+  useEffect(() => {
+    setValue(
+      "tags",
+      allTags.filter((tag) => selectedTags.includes(tag.name))
+    );
+  }, [selectedTags]);
 
   const { mutate } = useCreateProduct();
 
@@ -77,17 +95,76 @@ const AddProduct = () => {
         name="expirationDate"
         label="Expiration date"
       />
-      <Text style={{ color: "red" }}>TODO TAGS HERE</Text>
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 5 }}>
+        {allTags?.map(({ id, name }) => (
+          <Chip
+            key={id + name}
+            onPress={() => {
+              if (selectedTags.includes(name)) {
+                setSelectedTags((tags) => tags.filter((tag) => tag !== name));
+              } else {
+                setSelectedTags((tags) => [...tags, name]);
+              }
+            }}
+            selected={selectedTags.includes(name)}
+            onClose={
+              !id
+                ? () => {
+                    setNewTags((newTags) =>
+                      newTags.filter((tag) => tag !== name)
+                    );
+                  }
+                : undefined
+            }
+          >
+            {name}
+          </Chip>
+        ))}
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 20,
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <TextInput
+          style={{ flexGrow: 1 }}
+          label="Tag name"
+          mode="outlined"
+          onChangeText={(text) => setTagName(text)}
+          value={tagName}
+        />
+        <Button
+          mode="outlined"
+          icon="plus"
+          style={{ marginTop: 3 }}
+          onPress={() => {
+            if (tagName === "") return;
+            if (allTags?.some((tag) => tag.name === tagName)) return;
+            setNewTags((tags) => [...tags, tagName]);
+            setSelectedTags((tags) => [...tags, tagName]);
+            setTagName("");
+          }}
+        >
+          Add tag
+        </Button>
+      </View>
       <Button
         mode="contained"
         onPress={handleSubmit(
           (data) => {
+            if (selectedTags.length === 0) {
+              console.error("You need to select at least one tag");
+              return;
+            }
             mutate(data);
           },
           () => console.log("error")
         )}
       >
-        Add
+        Add product
       </Button>
     </View>
   );
