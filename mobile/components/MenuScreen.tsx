@@ -4,7 +4,13 @@ import { MenuButton } from "./MenuButton";
 import { useLogout } from "../api/services/auth";
 import { ActivityIndicator, Button, Switch, Text } from "react-native-paper";
 import { useMe } from "../api/services/user";
-import { useCallback, useMemo, useState } from "react";
+import {
+  useCallback,
+  useMemo,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { setLocalDarkMode, useLocalDarkMode } from "../api/services/misc";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TimePickerModal } from "react-native-paper-dates";
@@ -44,31 +50,46 @@ Notifications.setNotificationHandler({
   }),
 });
 
-async function schedulePushNotification() {
+async function schedulePushNotification(notificationTime: {
+  hours: number;
+  minutes: number;
+}) {
   requestPermissionsAsync();
   const settings = await Notifications.getPermissionsAsync();
   console.log(settings);
+  let trigger = {
+    hour: notificationTime.hours,
+    minute: notificationTime.minutes,
+    repeats: true,
+  };
 
   Notifications.scheduleNotificationAsync({
     content: {
-      title: "You've got mail! 📬",
+      title: "Save Your food!",
       body: "Here is the notification body",
     },
-    trigger: null,
+    trigger,
   });
 }
 
-const NotificationButton = () => {
+const NotificationButton = ({
+  notificationTime,
+}: {
+  notificationTime: { hours: number; minutes: number };
+}) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
+  const handlePress = () => {
+    schedulePushNotification(notificationTime);
+  };
 
   return (
-    <MenuButton name="Notifications" onPress={schedulePushNotification}>
+    <MenuButton name="Notifications" onPress={handlePress}>
       <Switch
         onValueChange={(value) => {
           toggleSwitch();
           if (value) {
-            schedulePushNotification();
+            schedulePushNotification(notificationTime);
           } else {
             Notifications.cancelAllScheduledNotificationsAsync();
           }
@@ -79,20 +100,28 @@ const NotificationButton = () => {
   );
 };
 
-const NotificationHourButton = () => {
+const NotificationHourButton = ({
+  setNotificationTime,
+  notificationTime,
+}: {
+  setNotificationTime: Dispatch<
+    SetStateAction<{ hours: number; minutes: number }>
+  >;
+  notificationTime: { hours: number; minutes: number };
+}) => {
   const [visible, setVisible] = useState(false);
   const onDismiss = useCallback(() => {
     setVisible(false);
   }, [setVisible]);
 
-  const [time, setTime] = useState({
-    minutes: 0,
-    hours: 0,
-  });
+  // const [time, setTime] = useState({
+  //   minutes: 0,
+  //   hours: 0,
+  // });
 
   const onConfirm = useCallback(
     ({ hours, minutes }: { hours: number; minutes: number }) => {
-      setTime({ hours, minutes });
+      setNotificationTime({ hours, minutes });
       setVisible(false);
       console.log({ hours, minutes });
     },
@@ -111,15 +140,15 @@ const NotificationHourButton = () => {
           }}
         >
           <Button onPress={() => setVisible(true)} uppercase={false}>
-            {time.hours.toString().padStart(2, "0")}:
-            {time.minutes.toString().padStart(2, "0")}
+            {notificationTime.hours.toString().padStart(2, "0")}:
+            {notificationTime.minutes.toString().padStart(2, "0")}
           </Button>
           <TimePickerModal
             visible={visible}
             onDismiss={onDismiss}
             onConfirm={onConfirm}
-            hours={time.hours}
-            minutes={time.minutes}
+            hours={notificationTime.hours}
+            minutes={notificationTime.minutes}
             use24HourClock
           />
         </View>
@@ -176,11 +205,18 @@ const LogoutButton = () => {
 };
 
 export default function MenuScreen() {
+  const [notificationTime, setNotificationTime] = useState({
+    hours: 0,
+    minutes: 0,
+  });
   return (
     <View style={styles.container}>
       <NightModeButton />
-      <NotificationButton />
-      <NotificationHourButton />
+      <NotificationButton notificationTime={notificationTime} />
+      <NotificationHourButton
+        notificationTime={notificationTime}
+        setNotificationTime={setNotificationTime}
+      />
       <StatisticsButton />
       <LogoutButton />
     </View>
