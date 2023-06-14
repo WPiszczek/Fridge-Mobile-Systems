@@ -159,7 +159,6 @@ export default function ProductListScreen() {
   };
 
   const sortProducts = (by: string, asc: boolean) => {
-    console.log("TO po " + by + " i czy asc" + asc);
     if (by === "name") {
       if (asc) {
         setItems((prev) =>
@@ -195,6 +194,12 @@ export default function ProductListScreen() {
     }
   };
 
+  const eat = (id: number) => {
+    console.log(id);
+  };
+  const edit = (id: number) => {};
+  const throwAway = (id: number) => {};
+
   return (
     <View style={styles.container}>
       <ProductSearch />
@@ -207,7 +212,7 @@ export default function ProductListScreen() {
       {data != undefined && items.length > 0 && (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
-            <ListItem item={it} key={index} />
+            <ListItem item={it} key={index} eatItem={eat}/>
           ))}
         </ScrollView>
       )}

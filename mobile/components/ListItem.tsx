@@ -1,17 +1,26 @@
 import React from "react";
 import { differenceInCalendarDays, format, getYear, parse, parseISO } from "date-fns";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Text, View } from "./Themed";
 import { AntDesign } from "@expo/vector-icons";
 import { Product } from "../api/services/product";
+import { Modal } from "react-native-paper";
+import EditItem from "./EditItem";
 
 interface ListItemProps {
   item: Product;
+  eatItem: (id: number) => (void);
 }
 
 let maxDate = "9999-12-31";
 
-export default function ListItem({ item }: ListItemProps) {
+export default function ListItem({ item, eatItem }: ListItemProps) {
+  const [visible, setVisible] = React.useState(false);
+
+  const showModal = () => setVisible(!visible);
+  const hideModal = () => setVisible(false);
+
+
   let url = item.pictureUrl != null ? item.pictureUrl : "";
   let expDate = parse(maxDate, "yyyy-MM-dd", new Date());
   let opExpDate = parse(maxDate, "yyyy-MM-dd", new Date());
@@ -42,6 +51,7 @@ export default function ListItem({ item }: ListItemProps) {
       )
     );
   return (
+    <TouchableOpacity onPress={showModal}>
     <View style={styles.ListItem}>
       <Image style={styles.ItemImage} source={{ uri: url }} />
       <View style={styles.ListItemDescription}>
@@ -72,6 +82,14 @@ export default function ListItem({ item }: ListItemProps) {
         </Text>
       </View>
     </View>
+    <Modal
+        visible={visible}
+        onDismiss={hideModal}
+        // contentContainerStyle={styles.modal}
+      >
+        <EditItem eatItem={eatItem} id={item.id}/>
+      </Modal>
+    </TouchableOpacity>
   );
 }
 
@@ -81,11 +99,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     justifyContent: "center",
+    position: "relative",
   },
   ItemImage: {
     alignSelf: "center",
-    minHeight: 50,
-    minWidth: 50,
+    height: 50,
+    width: 50,
     borderRadius: 5,
   },
   ListItemDescription: {
