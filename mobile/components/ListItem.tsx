@@ -61,6 +61,8 @@ export default function ListItem({ item, eatItem }: ListItemProps) {
         <View style={styles.ListItemDescriptionRight}>
           <Text style={styles.ItemCategories}>Słodycze</Text>
           <Text style={styles.ItemCategories}>Szafka lewa górna</Text>
+          <Text style={styles.ItemCategories}>Słodycze</Text>
+          <Text style={styles.ItemCategories}>Szafka lewa górna</Text>
         </View>
       </View>
       <View style={styles.ExpirationDate}>

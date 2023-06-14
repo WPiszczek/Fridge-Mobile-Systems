@@ -49,7 +49,7 @@ export default function EditItem({ eatItem, id }: EditItemProps) {
         onDismiss={hideModal}
         // contentContainerStyle={styles.modal}
       >
-        <Slider />
+        <Text></Text>
       </Modal>
     </View>
   );
