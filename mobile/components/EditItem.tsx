@@ -1,23 +1,30 @@
 import { Button, useTheme } from "react-native-paper";
 import { View, Text } from "./Themed";
 import { StyleSheet, Image } from "react-native";
+import { Modal } from "react-native-paper";
+import { useState } from "react";
 // const theme = useTheme();
 
 interface EditItemProps {
-    eatItem: (id: number) => (void);
-    id: number;
-  }
+  eatItem: (id: number) => void;
+  id: number;
+}
 
-export default function EditItem({eatItem, id}: EditItemProps) {
-    const theme = useTheme();
+export default function EditItem({ eatItem, id }: EditItemProps) {
+  const theme = useTheme();
+
+  const [visible, setVisible] = useState(false);
+
+  const showModal = () => setVisible(!visible);
+  const hideModal = () => setVisible(false);
   const checkedColor = theme.colors.background;
-  
+
   return (
-    <View style={[styles.options, {backgroundColor: "transparent"}]}>
+    <View style={[styles.options, { backgroundColor: "transparent" }]}>
       <Button
         icon="food-drumstick-outline"
         mode="contained"
-        onPress={() => eatItem(id)}
+        onPress={() => showModal()}
       >
         Eat
       </Button>
@@ -36,6 +43,14 @@ export default function EditItem({eatItem, id}: EditItemProps) {
       >
         Throw away
       </Button>
+
+      <Modal
+        visible={visible}
+        onDismiss={hideModal}
+        // contentContainerStyle={styles.modal}
+      >
+        <Slider />
+      </Modal>
     </View>
   );
 }
