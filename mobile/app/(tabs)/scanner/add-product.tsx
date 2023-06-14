@@ -4,7 +4,8 @@ import { useLocalSearchParams, useNavigation } from "expo-router";
 import { Text } from "react-native";
 import { useForm } from "react-hook-form";
 import { PaperFormInput } from "../../../components/PaperFormInput";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
+import { DatePickerInput } from "react-native-paper-dates";
 
 interface Product {
   product?: {
@@ -36,12 +37,15 @@ const AddProduct = () => {
     setValue("productName", data?.product?.product_name ?? "");
   }, [data]);
 
+  const [inputDate, setInputDate] = React.useState<Date | undefined>(undefined);
+
   return (
     <>
       <PaperFormInput
         control={control}
         name="productCode"
-        placeholder="product code"
+        label="Product code"
+        placeholder="EAN8 or EAN13"
         keyboardType="numeric"
         onChange={(e) => {
           // @ts-expect-error there's no way to type it
@@ -51,7 +55,15 @@ const AddProduct = () => {
       <PaperFormInput
         control={control}
         name="productName"
-        placeholder="product name"
+        label="Product name"
+      />
+      <DatePickerInput
+        locale="en"
+        mode="outlined"
+        label="Expiration date"
+        value={inputDate}
+        onChange={(d) => setInputDate(d)}
+        inputMode="start"
       />
       <Text>{JSON.stringify(data, null, 2)}</Text>
     </>

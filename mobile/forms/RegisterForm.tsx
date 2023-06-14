@@ -11,25 +11,25 @@ export const RegisterForm = () => {
   return (
     <>
       <Text variant="headlineMedium">Register</Text>
-      <PaperFormInput control={control} name="login" placeholder="login" />
-      <PaperFormInput control={control} name="email" placeholder="e-mail" />
+      <PaperFormInput control={control} name="login" label="Login" />
+      <PaperFormInput control={control} name="email" label="E-mail" />
       <PaperFormInput
         control={control}
         name="hashedPassword"
-        placeholder="password"
+        label="Password"
         textContentType="newPassword"
         secureTextEntry
       />
       <PaperFormInput
         control={control}
         name="firstName"
-        placeholder="first name"
+        label="First name"
         autoCapitalize="words"
       />
       <PaperFormInput
         control={control}
         name="lastName"
-        placeholder="last name"
+        label="Last name"
         autoCapitalize="words"
       />
       <Button

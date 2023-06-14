@@ -12,11 +12,11 @@ export const LoginForm: FC = () => {
   return (
     <>
       <Text variant="headlineMedium">Login</Text>
-      <PaperFormInput control={control} name="login" placeholder="login" />
+      <PaperFormInput control={control} name="login" label="Login" />
       <PaperFormInput
         control={control}
         name="hashedPassword"
-        placeholder="password"
+        label="Password"
         textContentType="password"
         secureTextEntry
       />
