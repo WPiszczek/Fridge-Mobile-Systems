@@ -4,6 +4,12 @@ import { apiClient, handleError } from "../clients";
 import { AxiosError } from "axios";
 import { extractData } from "../utils";
 import { ApiResponse } from "../types";
+import { useRouter } from "expo-router";
+
+interface Tag {
+  id?: number;
+  name: string;
+}
 
 export type EAN = string;
 export interface Product {
@@ -18,6 +24,15 @@ export interface Product {
   expirationDate: string | null;
   openingDate: string | null;
   openExpirationDate: string | null;
+}
+
+export interface CreateProduct {
+  productCode: EAN | null;
+  pictureUrl: string | null;
+  productName: string | null;
+  status: string;
+  expirationDate: string | null;
+  tags: Tag[];
 }
 
 export const useProducts = () =>
@@ -38,20 +53,26 @@ export const useProduct = (id: number) =>
     queryFn: ({ queryKey: [, id] }) => apiClient.get(`/products/${id}`),
   });
 
-export const useCreateProduct = () =>
-  useMutation({
+export const useCreateProduct = () => {
+  const router = useRouter();
+  return useMutation({
     mutationKey: ["products"],
-    mutationFn: async (data: Product) =>
+    mutationFn: async (data: CreateProduct) =>
       await apiClient.post("/products", data),
     onSuccess: () => {
       Toast.show("Product added!", {
         duration: Toast.durations.SHORT,
       });
+      router.back();
     },
+    onError: (error) =>
+      console.error(JSON.stringify((error as AxiosError).response, null, 2)),
   });
+};
 
-export const useUpdateProduct = () =>
-  useMutation({
+export const useUpdateProduct = () => {
+  const router = useRouter();
+  return useMutation({
     mutationKey: ["products"],
     mutationFn: async (data: Product) =>
       await apiClient.patch(`/products/${data.id}`, data),
@@ -59,8 +80,10 @@ export const useUpdateProduct = () =>
       Toast.show("Product updated!", {
         duration: Toast.durations.SHORT,
       });
+      router.back();
     },
   });
+};
 
 export const useDeleteProduct = () =>
   useMutation({

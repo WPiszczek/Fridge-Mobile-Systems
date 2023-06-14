@@ -1,54 +1,44 @@
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import { useForm } from "react-hook-form";
 import { PaperFormInput } from "../../../components/PaperFormInput";
 import React, { useEffect } from "react";
-import { DatePickerInput } from "react-native-paper-dates";
 import { View } from "../../../components/Themed";
-import { Button } from "react-native-paper";
-
-interface Product {
-  product?: {
-    product_name: string;
-  };
-}
-
-// "productCode": 5449000214911,
-// "productName": "Coca-cola",
-// "pictureUrl": "https://images.openfoodfacts.org/images/products/544/900/021/4911/front_en.119.400.jpg",
-// "status": "exists",
-// "tags": [
-//   { "id": 3, "name": "Napoje" },
-//   { "id": 4, "name": "Zimne" }
-// ]
+import { Button, Text } from "react-native-paper";
+import { useOpenFoodFactsProduct } from "../../../api/services/openFoodFacts";
+import { CreateProduct, useCreateProduct } from "../../../api/services/product";
+import { PaperDateInput } from "../../../components/PaperDateInput";
 
 const AddProduct = () => {
   const navigation = useNavigation();
   const { barcode } = useLocalSearchParams<{ barcode: string }>();
 
-  const { data, isFetching } = useQuery(
-    ["product", barcode],
-    ({ queryKey: [, barcode] }) =>
-      axios.get<Product>(
-        `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
-      ),
-    {
-      enabled: !!barcode && (barcode.length === 8 || barcode.length === 13),
-      select: (data) => data.data,
-    }
-  );
+  const { data: product, isFetching } = useOpenFoodFactsProduct(barcode);
 
-  const { control, setValue } = useForm({
-    defaultValues: { productCode: barcode, productName: "" },
+  const { control, setValue, handleSubmit, watch } = useForm<CreateProduct>({
+    defaultValues: {
+      productCode: barcode,
+      productName: "",
+      pictureUrl: "",
+      status: "exists",
+      tags: [{ name: "food" }],
+    },
   });
 
   useEffect(() => {
-    setValue("productName", data?.product?.product_name ?? "");
-  }, [data]);
+    setValue(
+      "productName",
+      product?.product_name_pl ?? product?.product_name ?? ""
+    );
+    setValue(
+      "pictureUrl",
+      product?.selected_images.front?.display.pl ?? product?.image_url ?? ""
+    );
+  }, [product]);
 
-  const [inputDate, setInputDate] = React.useState<Date | undefined>(undefined);
+  const pictureUrl = watch("pictureUrl");
+
+  const { mutate } = useCreateProduct();
 
   return (
     <View style={styles.container}>
@@ -63,26 +53,42 @@ const AddProduct = () => {
           navigation.setParams({ barcode: e.nativeEvent.text });
         }}
       />
+      {pictureUrl ? (
+        <Image
+          style={styles.image}
+          source={{
+            uri: pictureUrl,
+          }}
+        />
+      ) : product ? (
+        <Text>No image available</Text>
+      ) : (
+        <Text>Product not found</Text>
+      )}
+
       <PaperFormInput
         control={control}
         name="productName"
         label="Product name"
         disabled={isFetching}
       />
-      <View>
-        <DatePickerInput
-          startYear={2000}
-          endYear={2050}
-          locale="en"
-          mode="outlined"
-          label="Expiration date"
-          value={inputDate}
-          onChange={(d) => setInputDate(d)}
-          inputMode="start"
-        />
-      </View>
-
-      <Button mode="contained">Add</Button>
+      <PaperDateInput
+        control={control}
+        name="expirationDate"
+        label="Expiration date"
+      />
+      <Text style={{ color: "red" }}>TODO TAGS HERE</Text>
+      <Button
+        mode="contained"
+        onPress={handleSubmit(
+          (data) => {
+            mutate(data);
+          },
+          () => console.log("error")
+        )}
+      >
+        Add
+      </Button>
     </View>
   );
 };
@@ -93,6 +99,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     padding: 15,
     gap: 10,
+  },
+  image: {
+    width: "100%",
+    height: 300,
+    resizeMode: "contain",
   },
 });
 
