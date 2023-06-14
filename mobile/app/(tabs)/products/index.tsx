@@ -16,8 +16,7 @@ import { Product, EAN } from "../../../api/services/product";
 let maxDate = "9999-99-99";
 
 export default function ProductListScreen() {
-  const router = useRouter();
-  const [items, setItems] = useState<Product[]>([
+  let mock = [
     {id: 1,
       userId: 1,
       productCode: "214143324",
@@ -78,19 +77,21 @@ export default function ProductListScreen() {
       openingDate: "2023-06-12",
       openExpirationDate: "2023-06-30",
     },
-  ]);
+  ];
+  const router = useRouter();
+  const [items, setItems] = useState<Product[]>([]);
   const [allItems, setAllItems] = useState(items);
   const [ascending, setAscending] = useState(true);
   const { data, refetch } = useProducts();
   useRefreshOnFocus(refetch);
-  // const useData = async () => {
-  //   await useRefreshOnFocus(refetch);
-  //   console.log("useProducts", data);
-  //   if (data != undefined) {
-  //     setItems(data);
-  //   }
-  // };
-  // useData();
+  const useData = async () => {
+    await useRefreshOnFocus(refetch);
+    console.log("useProducts", data);
+    if (data != undefined) {
+      setItems(data);
+    }
+  };
+  useData();
 
   const [visibleFilters, setVisibleFilters] = useState(false);
   const showFilters = () => setVisibleFilters(true);

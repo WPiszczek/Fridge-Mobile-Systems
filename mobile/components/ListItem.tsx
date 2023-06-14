@@ -1,5 +1,5 @@
 import React from "react";
-import { differenceInCalendarDays, format, parse, parseISO } from "date-fns";
+import { differenceInCalendarDays, format, getYear, parse, parseISO } from "date-fns";
 import { StyleSheet, Image } from "react-native";
 import { Text, View } from "./Themed";
 import { AntDesign } from "@expo/vector-icons";
@@ -9,15 +9,21 @@ interface ListItemProps {
   item: Product;
 }
 
-let maxDate = "9999-99-99";
+let maxDate = "9999-12-31";
 
 export default function ListItem({ item }: ListItemProps) {
   let url = item.pictureUrl != null ? item.pictureUrl : "";
-  let expDate = parse(item.expirationDate ?? maxDate, "yyyy-MM-dd", new Date());
-  let opExpDate = parse(item.openExpirationDate ?? maxDate, "yyyy-MM-dd", new Date());
+  let expDate = parse(maxDate, "yyyy-MM-dd", new Date());
+  let opExpDate = parse(maxDate, "yyyy-MM-dd", new Date());
   let soonerExpirationDate =expDate < opExpDate
       ? expDate
       : opExpDate;
+
+  // let parsedSoonerExpDate = so
+
+  // let timeBetween =
+  //   parse(soonerExpirationDate, "yyyy-MM-dd", new Date()).setHours(0, 0, 0, 0) -
+  //   new Date().setHours(0, 0, 0, 0);
   let days = differenceInCalendarDays(soonerExpirationDate, new Date());// TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
   let warning =
     days < 7 && days > 5 ? (
@@ -51,7 +57,7 @@ export default function ListItem({ item }: ListItemProps) {
       </View>
       <View style={styles.SpaceFiller}></View>
       <View style={styles.ExpirationDate}>
-        <Text style={styles.ExpirationDateDate}>{format(soonerExpirationDate, "yyyy-MM-dd")}</Text>
+        <Text style={styles.ExpirationDateDate}>{getYear(soonerExpirationDate) === 9999 ? "Set expiration date" : format(soonerExpirationDate, "yyyy-MM-dd")}</Text>
         <Text
           style={[
             styles.ExpirationDateColoredPart,
@@ -60,7 +66,7 @@ export default function ListItem({ item }: ListItemProps) {
         >
           {/* {" "} */}
           {warning}
-          {` ${days} dni`}
+          {getYear(soonerExpirationDate) === 9999 ?"Set exp date" : ` ${days} dni`}
         </Text>
         <Text style={styles.ExpirationDatePercentage}>
           {item.usagePercentage}
@@ -79,8 +85,8 @@ const styles = StyleSheet.create({
   },
   ItemImage: {
     alignSelf: "center",
-    minHeight: 60,
-    minWidth: 60,
+    minHeight: 50,
+    minWidth: 50,
     borderRadius: 5,
   },
   ListItemDescription: {
@@ -104,13 +110,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   ItemCategories: {
-    fontSize: 12,
-  },
-  SpaceFiller: {
-    flex: 1,
+    fontSize: 10,
   },
   ExpirationDate: {
-    padding: 5,
+    paddingVertical: 10,
     flexDirection: "column",
     alignItems: "flex-end",
   },
