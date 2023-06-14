@@ -55,7 +55,6 @@ export default function ListItem({ item }: ListItemProps) {
           <Text style={styles.ItemCategories}>Szafka lewa górna</Text>
         </View>
       </View>
-      <View style={styles.SpaceFiller}></View>
       <View style={styles.ExpirationDate}>
         <Text style={styles.ExpirationDateDate}>{getYear(soonerExpirationDate) === 9999 ? "Set expiration date" : format(soonerExpirationDate, "yyyy-MM-dd")}</Text>
         <Text
