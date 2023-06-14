@@ -10,7 +10,7 @@ export default function BarcodeScannerScreen() {
   const router = useRouter();
 
   const handleBarCodeScanned: BarCodeScannedCallback = useCallback(
-    ({ data }) => router.push(`/scanner/add-item?barcode=${data}`),
+    ({ data }) => router.push(`/scanner/add-product?barcode=${data}`),
     []
   );
 

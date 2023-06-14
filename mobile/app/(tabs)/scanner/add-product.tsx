@@ -15,6 +15,15 @@ interface Product {
   };
 }
 
+// "productCode": 5449000214911,
+// "productName": "Coca-cola",
+// "pictureUrl": "https://images.openfoodfacts.org/images/products/544/900/021/4911/front_en.119.400.jpg",
+// "status": "exists",
+// "tags": [
+//   { "id": 3, "name": "Napoje" },
+//   { "id": 4, "name": "Zimne" }
+// ]
+
 const AddProduct = () => {
   const navigation = useNavigation();
   const { barcode } = useLocalSearchParams<{ barcode: string }>();
