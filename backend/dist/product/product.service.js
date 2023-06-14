@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const knex_config_1 = require("../configs/knex.config");
 const getProducts = async (userId, status = "exists") => {
     const result = await (0, knex_config_1.knex)("products")
-        .where({ userId, status })
+        .where({ "products.userId": userId, status })
         .leftJoin("product_tags", "products.id", "product_tags.productId")
         .leftJoin("tags", "product_tags.tagId", "tags.id")
         .select([
         "products.id as id",
-        "userId",
+        "products.userId",
         "productCode",
         "productName",
         "quantity",
@@ -30,7 +30,7 @@ const getSingleProduct = async (productId) => {
         .leftJoin("tags", "product_tags.tagId", "tags.id")
         .select([
         "products.id as id",
-        "userId",
+        "products.userId",
         "productCode",
         "productName",
         "quantity",
@@ -49,24 +49,29 @@ const getSingleProduct = async (productId) => {
     return [false, null];
 };
 const addProduct = async (product, tags) => {
-    const notInsertedTags = tags.filter((elem) => !elem.id);
-    let insertedTagsIds = tags.filter((elem) => elem.id).map((elem) => elem.id);
-    if (notInsertedTags.length > 0) {
-        const tagsResult = await (0, knex_config_1.knex)("tags").insert(notInsertedTags, ["id"]);
-        if (tagsResult.length == 0) {
-            return [false, null];
-        }
-        insertedTagsIds = insertedTagsIds.concat(tagsResult.map((elem) => elem.id));
-    }
     const productsResult = await (0, knex_config_1.knex)("products").insert(product, ["id"]);
     if (productsResult.length == 0) {
         return [false, null];
     }
-    const productTagsResult = await (0, knex_config_1.knex)("product_tags").insert(insertedTagsIds.map((elem) => {
-        return { tagId: elem, productId: productsResult[0].id };
-    }), ["tagId", "productId"]);
-    if (productTagsResult.length == 0) {
-        return [false, null];
+    if (tags.length > 0) {
+        let notInsertedTags = tags.filter((elem) => !elem.id);
+        let insertedTagsIds = tags.filter((elem) => elem.id).map((elem) => elem.id);
+        if (notInsertedTags.length > 0) {
+            notInsertedTags = notInsertedTags.map((elem) => {
+                return { ...elem, userId: product.userId };
+            });
+            const tagsResult = await (0, knex_config_1.knex)("tags").insert(notInsertedTags, ["id"]);
+            if (tagsResult.length == 0) {
+                return [false, null];
+            }
+            insertedTagsIds = insertedTagsIds.concat(tagsResult.map((elem) => elem.id));
+        }
+        const productTagsResult = await (0, knex_config_1.knex)("product_tags").insert(insertedTagsIds.map((elem) => {
+            return { tagId: elem, productId: productsResult[0].id };
+        }), ["tagId", "productId"]);
+        if (productTagsResult.length == 0) {
+            return [false, null];
+        }
     }
     return [true, productsResult[0].id];
 };

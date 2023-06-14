@@ -64,7 +64,7 @@ const tags = async (request, response) => {
         });
         return;
     }
-    await user_service_1.default.getTags().then((result) => {
+    await user_service_1.default.getTags(userId).then((result) => {
         const [success, tagsData] = result;
         if (success) {
             response.status(200).json({

@@ -64,7 +64,7 @@ const tags = async (request: Request, response: Response) => {
     return;
   }
 
-  await userService.getTags().then((result) => {
+  await userService.getTags(userId).then((result) => {
     const [success, tagsData] = result;
     if (success) {
       response.status(200).json({

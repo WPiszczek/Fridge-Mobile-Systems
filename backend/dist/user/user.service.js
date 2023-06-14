@@ -23,16 +23,19 @@ const getUserStats = async (userId, numberOfDays) => {
         .as("disposedCount");
     const result = await (0, knex_config_1.knex)().select(eatenCountQuery, disposedCountQuery);
     if (result.length > 0) {
+        const resultAsNumbers = {
+            eatenCount: parseInt(result[0].eatenCount),
+            disposedCount: parseInt(result[0].disposedCount)
+        };
         return [true, result[0]];
     }
     return [false, null];
 };
-const getTags = async () => {
-    const result = await (0, knex_config_1.knex)("tags").select("id", "name");
-    if (result.length > 0) {
-        return [true, result];
-    }
-    return [false, null];
+const getTags = async (userId) => {
+    const result = await (0, knex_config_1.knex)("tags")
+        .where("userId", userId)
+        .select("id", "name");
+    return [true, result];
 };
 exports.default = {
     getUser,
