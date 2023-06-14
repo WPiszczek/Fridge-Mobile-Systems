@@ -24,11 +24,13 @@ export const RegisterForm = () => {
         control={control}
         name="firstName"
         placeholder="first name"
+        autoCapitalize="words"
       />
       <PaperFormInput
         control={control}
         name="lastName"
         placeholder="last name"
+        autoCapitalize="words"
       />
       <Button
         onPress={handleSubmit((data) => register(data))}

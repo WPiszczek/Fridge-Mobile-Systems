@@ -1,6 +1,7 @@
 import { IconButton } from "react-native-paper";
 import { StyleSheet } from "react-native";
-import { Text, View, useThemeColor } from "./Themed";
+import { View } from "./Themed";
+import { useTheme, useThemeColor } from "../theme/utils";
 
 interface FilterAndSearchProps {
   props: {
@@ -12,16 +13,9 @@ export default function FilterAndSearch({ props }: FilterAndSearchProps) {
   const showModal = (which: string) => {
     props.showFilterAndSort(which);
   };
-
-  const backgroundColor = useThemeColor(
-    { light: "#FAFAFA", dark: "#0A0A0A" },
-    "background"
-  );
-
-  const iconColor = useThemeColor(
-    { light: "#4A5568", dark: "white" },
-    "background"
-  );
+  const theme = useTheme();
+  const backgroundColor = theme.colors.background;
+  const iconColor = theme.colors.text;
 
   return (
     <View style={styles.page}>

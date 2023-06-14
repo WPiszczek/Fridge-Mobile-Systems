@@ -1,9 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { Tabs } from "expo-router";
-import { useColorScheme } from "react-native";
-
-import Colors from "../../constants/Colors";
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -16,14 +13,8 @@ function TabBarIcon(props: {
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-      }}
-    >
+    <Tabs>
       <Tabs.Screen
         name="products"
         options={{
@@ -36,7 +27,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="scanner"
         options={{
-          title: "Scan",
+          title: "Scan your product",
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="barcode-scan"

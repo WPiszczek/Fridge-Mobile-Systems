@@ -6,12 +6,15 @@ import { useState, useEffect } from "react";
 import { useProducts } from "../../../api/services/product";
 import { useRefreshOnFocus } from "../../../lib/useRefreshOnFocus";
 import FilterAndSearch from "../../../components/FilterAndSearch";
-import { Modal } from "react-native-paper";
+import { Button, Modal } from "react-native-paper";
 import FilterModal from "../../../components/FilterModal";
 import SortModal from "../../../components/SortModal";
+import { useRouter } from "expo-router";
 import { parse } from "date-fns";
 
 export default function ProductListScreen() {
+  const router = useRouter();
+
   const [items, setItems] = useState([
     {
       id: 7,
@@ -179,6 +182,7 @@ export default function ProductListScreen() {
   const { data, refetch } = useProducts();
   useRefreshOnFocus(refetch);
   console.log("useProducts", data?.data);
+  
 
   const [visibleFilters, setVisibleFilters] = useState(false);
   const showFilters = () => setVisibleFilters(true);
@@ -360,15 +364,25 @@ export default function ProductListScreen() {
   return (
     <View style={styles.container}>
       <ProductSearch />
-      {data && <FilterAndSearch props={{ showFilterAndSort }} />}
-      {data ? (
+      {items && <FilterAndSearch props={{ showFilterAndSort }} />}
+      {data && items.length === 0 && (
+        <View style={styles.centeredContainer}>
+          <Text>You have no products.</Text>
+        </View>
+      )}
+      {data && items.length > 0 && (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
             <ListItem item={it} key={index} />
           ))}
         </ScrollView>
-      ) : (
-        <Text>Zaloguj się, aby przeglądać produkty</Text>
+      )}
+      {!data && (
+        <View style={styles.centeredContainer}>
+          <Button mode="elevated" onPress={() => router.push("/account/login")}>
+            Log in, to browse your products
+          </Button>
+        </View>
       )}
       <Modal
         visible={visibleFilters}
@@ -397,6 +411,11 @@ const styles = StyleSheet.create({
   },
   scroll: {
     width: "100%",
+  },
+  centeredContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
   modal: {},
 });

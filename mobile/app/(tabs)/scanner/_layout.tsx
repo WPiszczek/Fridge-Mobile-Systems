@@ -8,7 +8,7 @@ const ScannerLayout = () => (
   <Stack>
     <Stack.Screen name="index" options={{ headerShown: false }} />
     <Stack.Screen
-      name="[barcode]"
+      name="add-product"
       options={{
         title: "Add product",
         presentation: "modal",

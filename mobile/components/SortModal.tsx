@@ -1,4 +1,4 @@
-import { View, Text, useThemeColor } from "./Themed";
+import { View, Text } from "./Themed";
 import { StyleSheet } from "react-native";
 import { useState, Dispatch, SetStateAction } from "react";
 import { Checkbox, SegmentedButtons, Switch } from "react-native-paper";
@@ -47,7 +47,7 @@ export default function SortModal({ sort, asc, setAsc }: SortModalProps) {
       <Text style={styles.catHeader}>Sort by</Text>
       {sortType.map((checkbox, i) => (
         <Checkbox.Item
-          style={{ width: "100%" }}
+          style={styles.checkboxItem}
           label={checkbox.label}
           status={checkbox.checked ? "checked" : "unchecked"}
           onPress={() => checkboxHandler(checkbox.value, i)}
@@ -61,6 +61,9 @@ export default function SortModal({ sort, asc, setAsc }: SortModalProps) {
 }
 
 const styles = StyleSheet.create({
+  checkboxItem: {
+    width: "100%",
+  },
   page: {
     width: "90%",
     alignSelf: "center",

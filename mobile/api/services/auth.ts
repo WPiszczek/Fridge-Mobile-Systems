@@ -20,8 +20,11 @@ export const useRegister = () => {
     mutationFn: async (data: RegisterFormValues) =>
       await apiClient.post("/auth/register", data),
     onSuccess: () => {
-      queryClient.resetQueries(["auth"]);
-      router.replace("/account");
+      queryClient.resetQueries();
+      router.back();
+      Toast.show("You've successfully registered!", {
+        duration: Toast.durations.SHORT,
+      });
     },
   });
 };
@@ -39,8 +42,11 @@ export const useLogin = () => {
     mutationFn: async (data: LoginFormValues) =>
       await apiClient.post("/auth/login", data),
     onSuccess: () => {
-      queryClient.resetQueries(["auth"]);
-      router.replace("/account");
+      queryClient.resetQueries();
+      router.back();
+      Toast.show("You've successfully logged in!", {
+        duration: Toast.durations.SHORT,
+      });
     },
   });
 };
@@ -51,7 +57,7 @@ export const useLogout = () =>
     mutationFn: async () => await apiClient.post("/auth/logout"),
     onSuccess: () => {
       queryClient.resetQueries();
-      Toast.show("You have successfully logged out!", {
+      Toast.show("You've successfully logged out!", {
         duration: Toast.durations.SHORT,
       });
     },

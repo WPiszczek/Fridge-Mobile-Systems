@@ -1,7 +1,8 @@
-import { View, Text, useThemeColor } from "./Themed";
+import { View, Text } from "./Themed";
 import { StyleSheet } from "react-native";
 import { useState } from "react";
 import { SegmentedButtons, Checkbox } from "react-native-paper";
+import { useTheme } from "../theme/utils";
 
 interface FilterModalProps {
   item: {
@@ -49,18 +50,11 @@ export default function FilterModal({
     filter(period, categories.filter(el => el.checked === true).map(el => el.value));
   };
 
-  const backgroundColor = useThemeColor(
-    { light: "#FAFAFA", dark: "#0A0A0A" },
-    "background"
-  );
-
-  const uncheckedColor = useThemeColor(
-    { light: "#0A0A0A", dark: "#FAFAFA" },
-    "background"
-  );
+  const theme = useTheme();
+  const checkedColor = theme.colors.primary;
 
   return (
-    <View style={[{ backgroundColor }, styles.page]}>
+    <View style={[{ backgroundColor: theme.colors.background }, styles.page]}>
       <Text style={styles.catHeader}>Okres przydatności do spożycia</Text>
       <SegmentedButtons
         value={value}
@@ -70,22 +64,19 @@ export default function FilterModal({
           {
             value: "walk",
             label: " < 3",
-            uncheckedColor,
-            checkedColor: "green",
+            checkedColor,
             onPress: clickPeriod("3"),
           },
           {
             value: "train",
             label: " < 5",
-            uncheckedColor,
-            checkedColor: "green",
+            checkedColor,
             onPress: clickPeriod("5"),
           },
           {
             value: "drive",
             label: " all ",
-            uncheckedColor,
-            checkedColor: "green",
+            checkedColor,
             showSelectedCheck: true,
             onPress: clickPeriod("all"),
           },

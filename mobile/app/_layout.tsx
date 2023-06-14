@@ -1,17 +1,13 @@
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { ThemeProvider } from "@react-navigation/native";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { queryClient } from "../api/clients";
 import { PaperProvider } from "react-native-paper";
+import { useTheme } from "../theme/utils";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -35,20 +31,25 @@ export default function RootLayout() {
   );
 }
 
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
+function ThemedApp() {
+  const theme = useTheme();
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <QueryClientProvider client={queryClient}>
-        <RootSiblingParent>
-          <PaperProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-          </PaperProvider>
-        </RootSiblingParent>
-      </QueryClientProvider>
+    <ThemeProvider value={theme}>
+      <PaperProvider theme={theme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </PaperProvider>
     </ThemeProvider>
+  );
+}
+
+function RootLayoutNav() {
+  return (
+    <RootSiblingParent>
+      <QueryClientProvider client={queryClient}>
+        <ThemedApp />
+      </QueryClientProvider>
+    </RootSiblingParent>
   );
 }

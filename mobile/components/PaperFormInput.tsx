@@ -26,6 +26,7 @@ export const PaperFormInput = <T extends FieldValues>({
       {...restProps}
       mode={restProps.mode || "outlined"}
       style={[{ width: "100%" }, restProps.style]}
+      autoCapitalize={restProps.autoCapitalize || "none"}
     />
   );
 };

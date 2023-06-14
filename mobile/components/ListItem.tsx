@@ -1,9 +1,9 @@
 import React from "react";
 import { parse } from "date-fns";
 import { StyleSheet, Image } from "react-native";
-import Colors from "../constants/Colors";
 import { Text, View } from "./Themed";
-import { MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
+
 interface ListItemProps {
   item: {
     id: number;
@@ -24,7 +24,12 @@ interface ListItemProps {
 export default function ListItem({ item }: ListItemProps) {
   let soonerExpirationDate =
     parse(item.expirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0) <
-    parse(item.openExpirationDate, "dd.MM.yyyy", new Date()).setHours(0, 0, 0, 0)
+    parse(item.openExpirationDate, "dd.MM.yyyy", new Date()).setHours(
+      0,
+      0,
+      0,
+      0
+    )
       ? item.expirationDate
       : item.openExpirationDate;
   let timeBetween =
