@@ -8,10 +8,10 @@ import { RootSiblingParent } from "react-native-root-siblings";
 import { queryClient } from "../api/clients";
 import { PaperProvider } from "react-native-paper";
 import { useTheme } from "../theme/utils";
-import { en, registerTranslation } from "react-native-paper-dates";
+import { enGB, registerTranslation } from "react-native-paper-dates";
 export { ErrorBoundary } from "expo-router";
 
-registerTranslation("en", en);
+registerTranslation("en", enGB);
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
