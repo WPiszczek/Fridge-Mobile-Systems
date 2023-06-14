@@ -2,12 +2,13 @@ import { StyleSheet, useColorScheme } from "react-native";
 import { View } from "./Themed";
 import { MenuButton } from "./MenuButton";
 import { useLogout } from "../api/services/auth";
-import { Button, Switch, Text } from "react-native-paper";
+import { ActivityIndicator, Button, Switch, Text } from "react-native-paper";
 import { useMe } from "../api/services/user";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { setLocalDarkMode, useLocalDarkMode } from "../api/services/misc";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TimePickerModal } from "react-native-paper-dates";
+import { useStats } from "../api/services/stats";
 
 const NightModeButton = () => {
   const systemDarkMode = useColorScheme() === "dark";
@@ -84,9 +85,33 @@ const NotificationHourButton = () => {
 };
 
 const StatisticsButton = () => {
+  const { data, isFetching } = useStats();
+
+  const foodWasteRatio = useMemo(() => {
+    if (!data) return 0;
+    const total = data.disposedCount + data.eatenCount;
+    const ratio = data.disposedCount / (total > 0 ? total : 1);
+    const ratioPercentage = Math.round(ratio * 1000) / 10; // two decimal places
+    return ratioPercentage;
+  }, [data]);
+
   return (
     <MenuButton name="Stats">
-      <Text>TODO</Text>
+      {isFetching ? (
+        <ActivityIndicator animating={true} />
+      ) : data ? (
+        <View
+          style={{ backgroundColor: "transparent", alignItems: "flex-end" }}
+        >
+          <Text>Food waste ratio: {foodWasteRatio}%</Text>
+          <Text>
+            (disposed {data.disposedCount} products out of{" "}
+            {data.eatenCount + data.disposedCount})
+          </Text>
+        </View>
+      ) : (
+        <Text style={{ color: "darkred" }}>Error. Try again later.</Text>
+      )}
     </MenuButton>
   );
 };
