@@ -7,6 +7,7 @@ import { PaperFormInput } from "../../../components/PaperFormInput";
 import React, { useEffect } from "react";
 import { DatePickerInput } from "react-native-paper-dates";
 import { View } from "../../../components/Themed";
+import { Button } from "react-native-paper";
 
 interface Product {
   product?: {
@@ -18,7 +19,7 @@ const AddProduct = () => {
   const navigation = useNavigation();
   const { barcode } = useLocalSearchParams<{ barcode: string }>();
 
-  const { data, error, isLoading, isFetching } = useQuery(
+  const { data, isFetching } = useQuery(
     ["product", barcode],
     ({ queryKey: [, barcode] }) =>
       axios.get<Product>(
@@ -57,20 +58,22 @@ const AddProduct = () => {
         control={control}
         name="productName"
         label="Product name"
+        disabled={isFetching}
       />
-      <DatePickerInput
-        style={{
-          width: "100%",
-        }}
-        startYear={2000}
-        endYear={2050}
-        locale="en"
-        mode="outlined"
-        label="Expiration date"
-        value={inputDate}
-        onChange={(d) => setInputDate(d)}
-        inputMode="start"
-      />
+      <View>
+        <DatePickerInput
+          startYear={2000}
+          endYear={2050}
+          locale="en"
+          mode="outlined"
+          label="Expiration date"
+          value={inputDate}
+          onChange={(d) => setInputDate(d)}
+          inputMode="start"
+        />
+      </View>
+
+      <Button mode="contained">Add</Button>
     </View>
   );
 };
