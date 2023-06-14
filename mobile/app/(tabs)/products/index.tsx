@@ -3,7 +3,7 @@ import ListItem from "../../../components/ListItem";
 import { ProductSearch } from "../../../components/ProductSearch";
 import { Text, View } from "../../../components/Themed";
 import { useState, useEffect } from "react";
-import { useProducts, useUpdateProduct } from "../../../api/services/product";
+import { useProducts, useUpdateProduct, useDeleteProduct } from "../../../api/services/product";
 import { useRefreshOnFocus } from "../../../lib/useRefreshOnFocus";
 import FilterAndSearch from "../../../components/FilterAndSearch";
 import { Button, Modal } from "react-native-paper";
@@ -83,7 +83,8 @@ export default function ProductListScreen() {
   const [allItems, setAllItems] = useState(items);
   const [ascending, setAscending] = useState(true);
   const { data, refetch } = useProducts();
-  const { mutate } = useUpdateProduct();
+  const { mutate: mutateUpdate } = useUpdateProduct();
+  const{ mutate: mutateDelete } = useDeleteProduct();
   
   useRefreshOnFocus(refetch);
   const useData = async () => {
@@ -197,16 +198,23 @@ export default function ProductListScreen() {
   };
 
   const eat = (product: Product, perc: number) => {
-
-    const productData = {...product, usagePercentage: perc.toString()};
-    console.log(productData);
-    mutate(productData);
+    let productData;
+    if(perc === 100){
+      productData = {...product, usagePercentage: perc.toString(), status: "eaten"};
+      mutateUpdate(productData);
+    }else{
+      productData = {...product, usagePercentage: perc.toString()};
+      mutateUpdate(productData);
+    }
     //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
     
   };
   const edit = (id: number) => {};
-  const throwAway = (id: number) => {
-    console.log("Wyrzuć " + id)
+  const throwAway = (product: Product) => {
+    const productData = {...product, status: "disposed"};
+    console.log(productData);
+    mutateUpdate(productData);
+     //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
   };
 
   return (

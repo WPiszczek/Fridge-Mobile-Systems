@@ -13,7 +13,7 @@ interface EditItemProps {
   id: number;
   minPercentage: number;
   product: Product;
-  throwAway: (id: number) => void;
+  throwAway: (product: Product) => void;
 }
 
 export default function EditItem({
@@ -48,7 +48,7 @@ export default function EditItem({
   };
 
   const handleThrow = () => {
-    throwAway(id);
+    throwAway(product);
     showModalThrow();
   }
 

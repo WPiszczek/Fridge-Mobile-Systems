@@ -10,7 +10,7 @@ import EditItem from "./EditItem";
 interface ListItemProps {
   item: Product;
   eatItem: (product: Product, perc: number) => (void);
-  throwAway: (id: number) => (void);
+  throwAway: (product: Product) => (void);
 }
 
 let maxDate = "9999-12-31";
