@@ -3,7 +3,7 @@ import ListItem from "../../../components/ListItem";
 import { ProductSearch } from "../../../components/ProductSearch";
 import { Text, View } from "../../../components/Themed";
 import { useState, useEffect } from "react";
-import { useProducts } from "../../../api/services/product";
+import { useProducts, useUpdateProduct } from "../../../api/services/product";
 import { useRefreshOnFocus } from "../../../lib/useRefreshOnFocus";
 import FilterAndSearch from "../../../components/FilterAndSearch";
 import { Button, Modal } from "react-native-paper";
@@ -83,6 +83,8 @@ export default function ProductListScreen() {
   const [allItems, setAllItems] = useState(items);
   const [ascending, setAscending] = useState(true);
   const { data, refetch } = useProducts();
+  const { mutate } = useUpdateProduct();
+  
   useRefreshOnFocus(refetch);
   const useData = async () => {
     await useRefreshOnFocus(refetch);
@@ -194,8 +196,12 @@ export default function ProductListScreen() {
     }
   };
 
-  const eat = (id: number, perc: number) => {
-    console.log("Zjadlem: " + perc + " id jedzonka : " + id);
+  const eat = (product: Product, perc: number) => {
+
+    const productData = {...product, usagePercentage: perc.toString()};
+    console.log(productData);
+    mutate(productData);
+    
   };
   const edit = (id: number) => {};
   const throwAway = (id: number) => {
