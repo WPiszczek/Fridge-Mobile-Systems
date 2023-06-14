@@ -9,6 +9,7 @@ import { setLocalDarkMode, useLocalDarkMode } from "../api/services/misc";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { TimePickerModal } from "react-native-paper-dates";
 import { useStats } from "../api/services/stats";
+import * as Notifications from "expo-notifications";
 
 const NightModeButton = () => {
   const systemDarkMode = useColorScheme() === "dark";
@@ -24,13 +25,56 @@ const NightModeButton = () => {
   );
 };
 
+export async function requestPermissionsAsync() {
+  return await Notifications.requestPermissionsAsync({
+    ios: {
+      allowAlert: true,
+      allowBadge: true,
+      allowSound: true,
+      allowAnnouncements: true,
+    },
+  });
+}
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
+async function schedulePushNotification() {
+  requestPermissionsAsync();
+  const settings = await Notifications.getPermissionsAsync();
+  console.log(settings);
+
+  Notifications.scheduleNotificationAsync({
+    content: {
+      title: "You've got mail! 📬",
+      body: "Here is the notification body",
+    },
+    trigger: null,
+  });
+}
+
 const NotificationButton = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
-    <MenuButton name="Notifications">
-      <Switch onValueChange={toggleSwitch} value={isEnabled} />
+    <MenuButton name="Notifications" onPress={schedulePushNotification}>
+      <Switch
+        onValueChange={(value) => {
+          toggleSwitch();
+          if (value) {
+            schedulePushNotification();
+          } else {
+            Notifications.cancelAllScheduledNotificationsAsync();
+          }
+        }}
+        value={isEnabled}
+      />
     </MenuButton>
   );
 };
