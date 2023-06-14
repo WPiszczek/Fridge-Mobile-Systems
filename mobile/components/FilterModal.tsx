@@ -1,23 +1,52 @@
 import { View, Text, useThemeColor } from "./Themed";
 import { StyleSheet } from "react-native";
 import { useState } from "react";
-import { SegmentedButtons } from "react-native-paper";
+import { SegmentedButtons, Checkbox } from "react-native-paper";
 
 interface FilterModalProps {
   item: {
     xD: number;
   };
-  filterProducts: (category: string) => void;
+  filterProducts: (period: string, category: string[]) => void;
 }
 
 export default function FilterModal({
   item,
   filterProducts,
 }: FilterModalProps) {
+  const [categoriesCheckboxes, setCategoriesCheckboxes] = useState([
+    { label: "Dairy", value: "dairy", checked: false },
+    { label: "Meat", value: "meat", checked: false },
+    { label: "Drinks", value: "drinks", checked: false },
+    { label: "Warm", value: "warm", checked: false },
+  ]);
   const [value, setValue] = useState("");
+  const [period, setPeriod] = useState("");
 
-  const filter = (val: string) => (event: any) => {
-    filterProducts(val);
+  const clickPeriod = (per: string) => (event: any) => {
+    setPeriod(per);
+    let categories = categoriesCheckboxes
+    .filter((el) => el.checked === true)
+    .map((el) => el.value);
+    filter(per, categories);
+  };
+
+  const filter = (period: string, categories: string[]) => {
+    filterProducts(period, categories);
+  }
+  const checkboxHandler = (val: string) => {
+    let categories = categoriesCheckboxes.map((checkbox) => {
+        if (checkbox.value === val) {
+          const item = {
+            ...checkbox,
+            checked: !checkbox.checked,
+          };
+          return item;
+        }
+        return checkbox;
+      });
+    setCategoriesCheckboxes(categories);
+    filter(period, categories.filter(el => el.checked === true).map(el => el.value));
   };
 
   const backgroundColor = useThemeColor(
@@ -43,14 +72,14 @@ export default function FilterModal({
             label: " < 3",
             uncheckedColor,
             checkedColor: "green",
-            onPress: filter("3"),
+            onPress: clickPeriod("3"),
           },
           {
             value: "train",
             label: " < 5",
             uncheckedColor,
             checkedColor: "green",
-            onPress: filter("5"),
+            onPress: clickPeriod("5"),
           },
           {
             value: "drive",
@@ -58,12 +87,20 @@ export default function FilterModal({
             uncheckedColor,
             checkedColor: "green",
             showSelectedCheck: true,
-            onPress: filter("all"),
+            onPress: clickPeriod("all"),
           },
         ]}
       />
       <Text style={styles.catHeader}>Kategoria</Text>
-      {/* TODO dodać kategorie jako checkboxy, bo segment się wywala */}
+      {categoriesCheckboxes.map((checkbox, i) => (
+        <Checkbox.Item
+          style={{ width: "100%" }}
+          label={checkbox.label}
+          status={checkbox.checked ? "checked" : "unchecked"}
+          onPress={() => checkboxHandler(checkbox.value)}
+          key={i}
+        />
+      ))}
     </View>
   );
 }

@@ -8,15 +8,16 @@ interface ListItemProps {
   item: {
     id: number;
     userId: number;
-    productCode: number;
-    pictureUrl: string;
+    productCode: string;
     productName: string;
+    quantity: string;
+    pictureUrl: string;
+    status: string;
+    usagePercentage: string;
     expirationDate: string;
     openingDate: string;
     openExpirationDate: string;
-    quantity: string;
-    status: string;
-    usagePercentage: string;
+    tags: {id: number, name: string}[]
   };
 }
 

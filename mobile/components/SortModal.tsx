@@ -1,23 +1,24 @@
 import { View, Text, useThemeColor } from "./Themed";
 import { StyleSheet } from "react-native";
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { Checkbox, SegmentedButtons, Switch } from "react-native-paper";
 
 interface SortModalProps {
-  sort: (category: string) => void;
-  sortasc: (asc: boolean) => void;
+  sort: (category: string, asc: boolean) => void;
+  asc: boolean;
+  setAsc: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function SortModal({ sort, sortasc }: SortModalProps) {
-  //   const [value, setValue] = useState("");
+export default function SortModal({ sort, asc, setAsc }: SortModalProps) {
+  const [sortValue, setSortValue] = useState("name");
   const [sortType, setSortType] = useState([
     { label: "Name", value: "name", checked: false },
-    { label: "Opening Date", value: "opendate", checked: false },
-    { label: "Days Left", value: "daysleft", checked: false },
+    { label: "Days Left", value: "expirationdate", checked: false },
   ]);
 
   const checkboxHandler = (value: string, index: number) => {
-    sort(value);
+    setSortValue(value);
+    sort(value, asc);
     const newValue = sortType.map((checkbox, i) => {
       if (i !== index)
         return {
@@ -36,11 +37,9 @@ export default function SortModal({ sort, sortasc }: SortModalProps) {
     setSortType(newValue);
   };
 
-  const [ascendind, setAscending] = useState(true);
-
   const onToggleSwitch = () => {
-    sortasc(!ascendind);
-    setAscending(!ascendind);
+    sort(sortValue, !asc);
+    setAsc(!asc);
   };
 
   return (
@@ -52,10 +51,11 @@ export default function SortModal({ sort, sortasc }: SortModalProps) {
           label={checkbox.label}
           status={checkbox.checked ? "checked" : "unchecked"}
           onPress={() => checkboxHandler(checkbox.value, i)}
+          key={i}
         />
       ))}
       <Text style={styles.catHeader}>Sort ascending</Text>
-      <Switch value={ascendind} onValueChange={onToggleSwitch} />
+      <Switch value={asc} onValueChange={onToggleSwitch} />
     </View>
   );
 }
