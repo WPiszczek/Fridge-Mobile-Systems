@@ -55,7 +55,7 @@ export default function FilterModal({
 
   return (
     <View style={[{ backgroundColor: theme.colors.background }, styles.page]}>
-      <Text style={styles.catHeader}>Okres przydatności do spożycia</Text>
+      <Text style={styles.catHeader}>Shelf life</Text>
       <SegmentedButtons
         value={value}
         onValueChange={setValue}
@@ -82,7 +82,7 @@ export default function FilterModal({
           },
         ]}
       />
-      <Text style={styles.catHeader}>Kategoria</Text>
+      <Text style={styles.catHeader}>Category</Text>
       {categoriesCheckboxes.map((checkbox, i) => (
         <Checkbox.Item
           style={{ width: "100%" }}
