@@ -63,7 +63,7 @@ const AddProduct = () => {
       ) : product ? (
         <Text>No image available</Text>
       ) : (
-        <Text>Product not found</Text>
+        barcode && barcode !== "" && <Text>Product not found</Text>
       )}
 
       <PaperFormInput
