@@ -14,7 +14,7 @@ const NightModeButton = () => {
   const localDarkMode = useLocalDarkMode();
 
   return (
-    <MenuButton name="Tryb nocny">
+    <MenuButton name="Night mode">
       <Switch
         onValueChange={setLocalDarkMode}
         value={localDarkMode ?? systemDarkMode}
@@ -28,7 +28,7 @@ const NotificationButton = () => {
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
 
   return (
-    <MenuButton name="Powiadomienia">
+    <MenuButton name="Notifications">
       <Switch onValueChange={toggleSwitch} value={isEnabled} />
     </MenuButton>
   );
@@ -55,7 +55,7 @@ const NotificationHourButton = () => {
   );
 
   return (
-    <MenuButton name="Godzina">
+    <MenuButton name="Notification hour">
       <SafeAreaProvider>
         <View
           style={{
@@ -85,7 +85,7 @@ const NotificationHourButton = () => {
 
 const StatisticsButton = () => {
   return (
-    <MenuButton name="Statystyki">
+    <MenuButton name="Stats">
       <Text>TODO</Text>
     </MenuButton>
   );
@@ -100,7 +100,7 @@ const LogoutButton = () => {
     .join(" ");
 
   return (
-    <MenuButton onPress={() => logout()} name="Wyloguj">
+    <MenuButton onPress={() => logout()} name="Logout">
       <Text>{nameSurname}</Text>
     </MenuButton>
   );
