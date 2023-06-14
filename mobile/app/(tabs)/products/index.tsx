@@ -14,6 +14,7 @@ import { parse } from "date-fns";
 
 export default function ProductListScreen() {
   const router = useRouter();
+  // const [items, setItems] = useState([]);
 
   const [items, setItems] = useState([
     {
@@ -181,7 +182,14 @@ export default function ProductListScreen() {
   const [ascending, setAscending] = useState(true);
   const { data, refetch } = useProducts();
   useRefreshOnFocus(refetch);
-  console.log("useProducts", data?.data);
+  const useData = async() => {
+    await useRefreshOnFocus(refetch);
+    console.log("useProducts", data);
+    // if(data != undefined){
+      //   setItems(data.data);
+      // }
+    }
+    useData();
   
 
   const [visibleFilters, setVisibleFilters] = useState(false);
@@ -365,12 +373,12 @@ export default function ProductListScreen() {
     <View style={styles.container}>
       <ProductSearch />
       {items && <FilterAndSearch props={{ showFilterAndSort }} />}
-      {data && items.length === 0 && (
+      {data != undefined && items.length === 0 && (
         <View style={styles.centeredContainer}>
           <Text>You have no products.</Text>
         </View>
       )}
-      {data && items.length > 0 && (
+      {data  != undefined&& items.length > 0 && (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
             <ListItem item={it} key={index} />
