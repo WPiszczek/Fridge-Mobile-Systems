@@ -4,11 +4,10 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { useColorScheme } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { queryClient } from "../api/clients";
 import { PaperProvider } from "react-native-paper";
-import { CombinedDarkTheme, CombinedDefaultTheme } from "../theme/themes";
+import { useTheme } from "../theme/utils";
 
 export { ErrorBoundary } from "expo-router";
 
@@ -32,21 +31,25 @@ export default function RootLayout() {
   );
 }
 
+function ThemedApp() {
+  const theme = useTheme();
+  return (
+    <ThemeProvider value={theme}>
+      <PaperProvider theme={theme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+      </PaperProvider>
+    </ThemeProvider>
+  );
+}
+
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-  const theme =
-    colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme;
   return (
     <RootSiblingParent>
-      <PaperProvider theme={theme}>
-        <ThemeProvider value={theme}>
-          <QueryClientProvider client={queryClient}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-          </QueryClientProvider>
-        </ThemeProvider>
-      </PaperProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemedApp />
+      </QueryClientProvider>
     </RootSiblingParent>
   );
 }
