@@ -2,10 +2,12 @@ import { StyleSheet, useColorScheme } from "react-native";
 import { View } from "./Themed";
 import { MenuButton } from "./MenuButton";
 import { useLogout } from "../api/services/auth";
-import { Switch, Text } from "react-native-paper";
+import { Button, Switch, Text } from "react-native-paper";
 import { useMe } from "../api/services/user";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { setLocalDarkMode, useLocalDarkMode } from "../api/services/misc";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { TimePickerModal } from "react-native-paper-dates";
 
 const NightModeButton = () => {
   const systemDarkMode = useColorScheme() === "dark";
@@ -33,9 +35,50 @@ const NotificationButton = () => {
 };
 
 const NotificationHourButton = () => {
+  const [visible, setVisible] = useState(false);
+  const onDismiss = useCallback(() => {
+    setVisible(false);
+  }, [setVisible]);
+
+  const [time, setTime] = useState({
+    minutes: 0,
+    hours: 0,
+  });
+
+  const onConfirm = useCallback(
+    ({ hours, minutes }: { hours: number; minutes: number }) => {
+      setTime({ hours, minutes });
+      setVisible(false);
+      console.log({ hours, minutes });
+    },
+    [setVisible]
+  );
+
   return (
     <MenuButton name="Godzina">
-      <Text>TODO</Text>
+      <SafeAreaProvider>
+        <View
+          style={{
+            justifyContent: "center",
+            flex: 1,
+            alignItems: "flex-end",
+            backgroundColor: "transparent",
+          }}
+        >
+          <Button onPress={() => setVisible(true)} uppercase={false}>
+            {time.hours.toString().padStart(2, "0")}:
+            {time.minutes.toString().padStart(2, "0")}
+          </Button>
+          <TimePickerModal
+            visible={visible}
+            onDismiss={onDismiss}
+            onConfirm={onConfirm}
+            hours={time.hours}
+            minutes={time.minutes}
+            use24HourClock
+          />
+        </View>
+      </SafeAreaProvider>
     </MenuButton>
   );
 };
