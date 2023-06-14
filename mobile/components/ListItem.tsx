@@ -21,17 +21,14 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
   const showModal = () => setVisible(!visible);
   const hideModal = () => setVisible(false);
 
-
   let url = item.pictureUrl != null ? item.pictureUrl : "";
-  let expDate = parse(maxDate, "yyyy-MM-dd", new Date());
-  let opExpDate = parse(maxDate, "yyyy-MM-dd", new Date());
+  let expDate = new Date(item.expirationDate ?? maxDate);
+  let opExpDate = new Date(item.openExpirationDate ?? maxDate);
   let soonerExpirationDate = expDate < opExpDate ? expDate : opExpDate;
 
   // let parsedSoonerExpDate = so
 
-  // let timeBetween =
-  //   parse(soonerExpirationDate, "yyyy-MM-dd", new Date()).setHours(0, 0, 0, 0) -
-  //   new Date().setHours(0, 0, 0, 0);
+
   let days = differenceInCalendarDays(soonerExpirationDate, new Date()); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
   let warning =
     days < 7 && days > 5 ? (
