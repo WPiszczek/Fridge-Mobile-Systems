@@ -9,12 +9,13 @@ import EditItem from "./EditItem";
 
 interface ListItemProps {
   item: Product;
-  eatItem: (id: number) => (void);
+  eatItem: (id: number, perc: number) => (void);
+  throwAway: (id: number) => (void);
 }
 
 let maxDate = "9999-12-31";
 
-export default function ListItem({ item, eatItem }: ListItemProps) {
+export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
   const [visible, setVisible] = React.useState(false);
 
   const showModal = () => setVisible(!visible);
@@ -93,7 +94,7 @@ export default function ListItem({ item, eatItem }: ListItemProps) {
         onDismiss={hideModal}
         // contentContainerStyle={styles.modal}
       >
-        <EditItem eatItem={eatItem} id={item.id}/>
+        <EditItem eatItem={eatItem} id={item.id} minPercentage={30} throwAway={throwAway}/>
       </Modal>
     </TouchableOpacity>
   );

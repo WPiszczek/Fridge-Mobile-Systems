@@ -1,30 +1,65 @@
-import { Button, useTheme } from "react-native-paper";
+import { Button, IconButton } from "react-native-paper";
 import { View, Text } from "./Themed";
 import { StyleSheet, Image } from "react-native";
-import { Modal } from "react-native-paper";
+import { Modal, Portal } from "react-native-paper";
 import { useState } from "react";
+import { Slider } from "@miblanchard/react-native-slider";
+import { useTheme, useThemeColor } from "../theme/utils";
 // const theme = useTheme();
 
 interface EditItemProps {
-  eatItem: (id: number) => void;
+  eatItem: (id: number, percentage: number) => void;
   id: number;
+  minPercentage: number;
+  throwAway: (id: number) => void;
 }
 
-export default function EditItem({ eatItem, id }: EditItemProps) {
+export default function EditItem({
+  eatItem,
+  id,
+  minPercentage,
+  throwAway,
+}: EditItemProps) {
   const theme = useTheme();
+  const [percentage, setPercentage] = useState(minPercentage);
+  const [visibleThrow, setvisibleThrow] = useState(false);
+  const [visibleEat, setvisibleEat] = useState(false);
 
-  const [visible, setVisible] = useState(false);
+  const showModalEat = () => {
+      setvisibleEat(!visibleEat);
 
-  const showModal = () => setVisible(!visible);
-  const hideModal = () => setVisible(false);
-  const checkedColor = theme.colors.background;
+  };
+
+  const showModalThrow = () => {
+    setvisibleThrow(!visibleThrow);
+
+  };
+  const hideModalEat = () => setvisibleEat(false);
+  const hideModalThrow = () => setvisibleThrow(false);
+  const backgroundColor = theme.colors.background;
+  const iconColor = theme.colors.text;
+  const tint = theme.colors.primary;
+
+  const changePercentage = (val: number) => {
+    setPercentage(val);
+  };
+
+  const handleThrow = () => {
+    throwAway(id);
+    showModalThrow();
+  }
+
+  const handleEat = () => {
+    eatItem(id, percentage);
+    showModalEat();
+  }
 
   return (
     <View style={[styles.options, { backgroundColor: "transparent" }]}>
       <Button
         icon="food-drumstick-outline"
         mode="contained"
-        onPress={() => showModal()}
+        onPress={() => showModalEat()}
       >
         Eat
       </Button>
@@ -39,18 +74,59 @@ export default function EditItem({ eatItem, id }: EditItemProps) {
       <Button
         icon="delete-outline"
         mode="contained"
-        onPress={() => console.log("throw")}
+        onPress={() => showModalThrow()}
       >
         Throw away
       </Button>
+      <Portal>
+        <Modal
+          visible={visibleEat}
+          onDismiss={hideModalEat}
+          contentContainerStyle={[
+            styles.modal,
+            { backgroundColor: backgroundColor },
+          ]}
+        >
+          <Slider
+            value={percentage}
+            minimumValue={0}
+            maximumValue={100}
+            step={10}
+            onValueChange={(val) => changePercentage(val[0])}
+            containerStyle={styles.slider}
+            thumbTintColor={tint}
+          />
+          <Text
+            style={styles.percText}
+          >{`Percentage eaten: ${percentage}`}</Text>
 
-      <Modal
-        visible={visible}
-        onDismiss={hideModal}
-        // contentContainerStyle={styles.modal}
-      >
-        <Text></Text>
-      </Modal>
+          <Button
+            icon="check"
+            mode="contained"
+            onPress={() => handleEat()}
+          >
+            Save
+          </Button>
+        </Modal>
+
+        <Modal
+          visible={visibleThrow}
+          onDismiss={hideModalThrow}
+          contentContainerStyle={[
+            styles.modal,
+            { backgroundColor: backgroundColor },
+          ]}
+        >
+          <Text style={styles.percText}>Are you sure You want to throw it away?</Text>
+          <Button
+            icon="check"
+            mode="contained"
+            onPress={() => handleThrow()}
+          >
+            Im sure, throw it away!
+          </Button>
+        </Modal>
+      </Portal>
     </View>
   );
 }
@@ -63,6 +139,20 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
     height: 80,
-    // height: "100%",
+  },
+  slider: {
+    width: "80%",
+    marginVertical: 20,
+  },
+  percText: {
+    marginVertical: 20,
+  },
+  modal: {
+    backgroundColor: "red",
+    // minHeight: "40%",
+    alignItems: "center",
+    paddingVertical: 20,
+    width: "90%",
+    alignSelf: "center",
   },
 });

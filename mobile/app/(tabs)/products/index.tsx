@@ -194,11 +194,13 @@ export default function ProductListScreen() {
     }
   };
 
-  const eat = (id: number) => {
-    console.log(id);
+  const eat = (id: number, perc: number) => {
+    console.log("Zjadlem: " + perc + " id jedzonka : " + id);
   };
   const edit = (id: number) => {};
-  const throwAway = (id: number) => {};
+  const throwAway = (id: number) => {
+    console.log("Wyrzuć " + id)
+  };
 
   return (
     <View style={styles.container}>
@@ -212,7 +214,7 @@ export default function ProductListScreen() {
       {data != undefined && items.length > 0 && (
         <ScrollView style={styles.scroll}>
           {items.map((it, index) => (
-            <ListItem item={it} key={index} eatItem={eat}/>
+            <ListItem item={it} key={index} eatItem={eat} throwAway={throwAway}/>
           ))}
         </ScrollView>
       )}
