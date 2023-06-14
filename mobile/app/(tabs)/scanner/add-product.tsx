@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { Text } from "react-native";
+import { StyleSheet } from "react-native";
 import { useForm } from "react-hook-form";
 import { PaperFormInput } from "../../../components/PaperFormInput";
 import React, { useEffect } from "react";
 import { DatePickerInput } from "react-native-paper-dates";
+import { View } from "../../../components/Themed";
 
 interface Product {
   product?: {
@@ -40,7 +41,7 @@ const AddProduct = () => {
   const [inputDate, setInputDate] = React.useState<Date | undefined>(undefined);
 
   return (
-    <>
+    <View style={styles.container}>
       <PaperFormInput
         control={control}
         name="productCode"
@@ -58,6 +59,11 @@ const AddProduct = () => {
         label="Product name"
       />
       <DatePickerInput
+        style={{
+          width: "100%",
+        }}
+        startYear={2000}
+        endYear={2050}
         locale="en"
         mode="outlined"
         label="Expiration date"
@@ -65,9 +71,17 @@ const AddProduct = () => {
         onChange={(d) => setInputDate(d)}
         inputMode="start"
       />
-      <Text>{JSON.stringify(data, null, 2)}</Text>
-    </>
+    </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    padding: 15,
+    gap: 10,
+  },
+});
 
 export default AddProduct;
