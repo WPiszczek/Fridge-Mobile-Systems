@@ -9,7 +9,7 @@ import EditItem from "./EditItem";
 
 interface ListItemProps {
   item: Product;
-  eatItem: (id: number, perc: number) => (void);
+  eatItem: (product: Product, perc: number) => (void);
   throwAway: (id: number) => (void);
 }
 
@@ -94,7 +94,7 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
         onDismiss={hideModal}
         // contentContainerStyle={styles.modal}
       >
-        <EditItem eatItem={eatItem} id={item.id} minPercentage={30} throwAway={throwAway}/>
+        <EditItem eatItem={eatItem} id={item.id} minPercentage={30} throwAway={throwAway} product={item}/>
       </Modal>
     </TouchableOpacity>
   );

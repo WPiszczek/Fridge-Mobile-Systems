@@ -201,6 +201,7 @@ export default function ProductListScreen() {
     const productData = {...product, usagePercentage: perc.toString()};
     console.log(productData);
     mutate(productData);
+    //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
     
   };
   const edit = (id: number) => {};

@@ -5,12 +5,14 @@ import { Modal, Portal } from "react-native-paper";
 import { useState } from "react";
 import { Slider } from "@miblanchard/react-native-slider";
 import { useTheme, useThemeColor } from "../theme/utils";
+import { Product } from "../api/services/product";
 // const theme = useTheme();
 
 interface EditItemProps {
-  eatItem: (id: number, percentage: number) => void;
+  eatItem: (item: Product, percentage: number) => void;
   id: number;
   minPercentage: number;
+  product: Product;
   throwAway: (id: number) => void;
 }
 
@@ -19,6 +21,7 @@ export default function EditItem({
   id,
   minPercentage,
   throwAway,
+  product
 }: EditItemProps) {
   const theme = useTheme();
   const [percentage, setPercentage] = useState(minPercentage);
@@ -50,7 +53,7 @@ export default function EditItem({
   }
 
   const handleEat = () => {
-    eatItem(id, percentage);
+    eatItem(product, percentage);
     showModalEat();
   }
 
