@@ -102,7 +102,7 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
         <EditItem
           eatItem={eatItem}
           id={item.id}
-          minPercentage={30}
+          minPercentage={parseInt(item.usagePercentage ?? "0")}
           throwAway={throwAway}
           product={item}
         />
