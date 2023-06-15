@@ -33,7 +33,7 @@ export default function ListItem({
 
   let days = differenceInCalendarDays(soonerExpirationDate, new Date()); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
   let warning =
-    days < 7 && days > 5 ? (
+    days < 7 && days >= 5 ? (
       <AntDesign
         name="exclamationcircleo"
         style={styles.ExpirationDateWarning}
@@ -81,7 +81,7 @@ export default function ListItem({
           <Text
             style={[
               styles.ExpirationDateColoredPart,
-              days > 5 && days < 7 ? styles.Orange : days < 5 && styles.Red,
+              days >= 5 && days < 7 ? styles.Orange : days < 5 && styles.Red,
             ]}
           >
             {warning}

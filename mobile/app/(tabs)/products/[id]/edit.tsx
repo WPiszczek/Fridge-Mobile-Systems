@@ -40,7 +40,6 @@ export default function EditProduct() {
   });
 
   useEffect(() => {
-    console.log("off product set");
     setValue(
       "productName",
       product?.productName ??
@@ -80,7 +79,6 @@ export default function EditProduct() {
 
   useEffect(() => {
     if (!product) return;
-    console.log("product set");
     // @ts-expect-error
     navigation.setParams({ barcode: product?.productCode ?? "" });
     setValue("productName", product.productName);
@@ -131,7 +129,7 @@ export default function EditProduct() {
           name="expirationDate"
           label="Expiration date"
         />
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 5 }}>
+        {/* <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 5 }}>
           {allTags?.map(({ id, name }) => (
             <Chip
               key={id + name}
@@ -186,7 +184,7 @@ export default function EditProduct() {
           >
             Add tag
           </Button>
-        </View>
+        </View> */}
         <Button
           mode="contained"
           onPress={handleSubmit(
