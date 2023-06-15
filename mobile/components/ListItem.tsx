@@ -54,7 +54,11 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
   return (
     <TouchableOpacity onPress={showModal}>
       <View style={styles.ListItem}>
-        {url && <Image style={styles.ItemImage} source={{ uri: url }} />}
+        {url ? (
+          <Image style={styles.ItemImage} source={{ uri: url }} />
+        ) : (
+          <View style={styles.ItemImage} />
+        )}
         <View style={styles.ListItemDescription}>
           <View style={styles.ListItemDescriptionLeft}>
             <Text style={styles.ItemCode}>{item.productCode}</Text>
@@ -112,7 +116,8 @@ const styles = StyleSheet.create({
   ListItem: {
     flexDirection: "row",
     width: "100%",
-    justifyContent: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
     position: "relative",
   },
   ItemImage: {

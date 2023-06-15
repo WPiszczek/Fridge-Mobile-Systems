@@ -112,7 +112,7 @@ export default function EditItem({
           ]}
         >
           <Text style={styles.percText}>
-            Are you sure You want to throw it away?
+            Are you sure you want to throw it away?
           </Text>
           <Button icon="check" mode="contained" onPress={() => handleThrow()}>
             Im sure, throw it away!
