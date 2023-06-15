@@ -100,6 +100,8 @@ export default function ProductListScreen() {
         <ProductSearch />
         {items && (
           <FilterAndSearch
+            areFiltersSet={filters.days !== "all" || filters.tags.length > 0}
+            isSortingSet={sorting.sortBy !== "none"}
             showFilterModal={() => setVisibleFilters(true)}
             showSortModal={() => setVisibleSort(true)}
           />
