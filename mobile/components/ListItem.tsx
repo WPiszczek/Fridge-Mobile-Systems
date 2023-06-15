@@ -74,7 +74,7 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
         <View style={styles.ExpirationDate}>
           <Text style={styles.ExpirationDateDate}>
             {getYear(soonerExpirationDate) === 9999
-              ? "Set expiration date"
+              ? "?"
               : format(soonerExpirationDate, "yyyy-MM-dd")}
           </Text>
           <Text
@@ -83,14 +83,11 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
               days > 5 && days < 7 ? styles.Orange : days < 5 && styles.Red,
             ]}
           >
-            {/* {" "} */}
             {warning}
-            {getYear(soonerExpirationDate) === 9999
-              ? "Set exp date"
-              : ` ${days} dni`}
+            {getYear(soonerExpirationDate) === 9999 ? "?" : ` ${days} dni`}
           </Text>
           <Text style={styles.ExpirationDatePercentage}>
-            {item.usagePercentage}
+            {item.usagePercentage ? item.usagePercentage + "%" : ""}
           </Text>
         </View>
       </View>

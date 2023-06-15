@@ -53,7 +53,14 @@ export const FilterModal: FC<FilterModalProps> = ({ filters, setFilters }) => {
         ]}
       />
       <Text style={styles.catHeader}>Category</Text>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 5 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          flexWrap: "wrap",
+          paddingHorizontal: 10,
+          gap: 5,
+        }}
+      >
         {tags?.map(({ id, name }) => (
           <Chip
             key={id + name}
