@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  differenceInCalendarDays,
-  format,
-  getYear,
-  parse,
-  parseISO,
-} from "date-fns";
+import React, { Dispatch, SetStateAction } from "react";
+import { differenceInCalendarDays, format, getYear } from "date-fns";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Text, View } from "./Themed";
 import { AntDesign } from "@expo/vector-icons";
@@ -17,16 +11,19 @@ interface ListItemProps {
   item: Product;
   eatItem: (product: Product, perc: number) => void;
   throwAway: (product: Product) => void;
+  isSelected: boolean;
+  setSelected: Dispatch<SetStateAction<number | undefined>>;
 }
 
 let maxDate = "9999-12-31";
 
-export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
-  const [visible, setVisible] = React.useState(false);
-
-  const showModal = () => setVisible(!visible);
-  const hideModal = () => setVisible(false);
-
+export default function ListItem({
+  item,
+  eatItem,
+  throwAway,
+  isSelected,
+  setSelected,
+}: ListItemProps) {
   let url = item.pictureUrl != null ? item.pictureUrl : "";
   let expDate = new Date(item.expirationDate ?? maxDate);
   let opExpDate = new Date(item.openExpirationDate ?? maxDate);
@@ -52,7 +49,11 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
       )
     );
   return (
-    <TouchableOpacity onPress={showModal}>
+    <TouchableOpacity
+      onPress={() =>
+        setSelected((id) => (id === item.id ? undefined : item.id))
+      }
+    >
       <View style={styles.ListItem}>
         {url ? (
           <Image style={styles.ItemImage} source={{ uri: url }} />
@@ -91,11 +92,7 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
           </Text>
         </View>
       </View>
-      <Modal
-        visible={visible}
-        onDismiss={hideModal}
-        // contentContainerStyle={styles.modal}
-      >
+      <Modal visible={isSelected} onDismiss={() => setSelected(undefined)}>
         <EditItem
           eatItem={eatItem}
           id={item.id}

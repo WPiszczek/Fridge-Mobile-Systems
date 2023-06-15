@@ -38,6 +38,8 @@ export default function ProductListScreen() {
     ascending: true,
   });
 
+  const [selectedProductId, setSelectedProductId] = useState<number>();
+
   const eat = (product: Product, perc: number) => {
     let productData;
     if (perc === 100) {
@@ -119,16 +121,27 @@ export default function ProductListScreen() {
           />
         )}
       </View>
-      {items != undefined && items.length === 0 && (
+      {items && items.length === 0 && (
         <View style={styles.centeredContainer}>
           <Text>You have no products.</Text>
         </View>
       )}
-      {items != undefined && items.length > 0 && (
+      {items &&
+        items.length !== 0 &&
+        filteredSortedItems &&
+        filteredSortedItems.length === 0 && (
+          <View style={styles.centeredContainer}>
+            <Text>No products found.</Text>
+            <Text>Adjust your filters or search query.</Text>
+          </View>
+        )}
+      {filteredSortedItems && filteredSortedItems.length > 0 && (
         <ScrollView style={styles.scroll}>
-          {filteredSortedItems?.map((it, index) => (
+          {filteredSortedItems?.map((item, index) => (
             <ListItem
-              item={it}
+              item={item}
+              isSelected={item.id === selectedProductId}
+              setSelected={setSelectedProductId}
               key={index}
               eatItem={eat}
               throwAway={throwAway}
