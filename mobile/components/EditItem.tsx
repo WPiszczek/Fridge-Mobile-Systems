@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Slider } from "@miblanchard/react-native-slider";
 import { useTheme } from "../theme/utils";
 import { Product } from "../api/services/product";
-// const theme = useTheme();
+import { useRouter } from "expo-router";
 
 interface EditItemProps {
   eatItem: (item: Product, percentage: number) => void;
@@ -24,6 +24,7 @@ export default function EditItem({
   product,
 }: EditItemProps) {
   const theme = useTheme();
+  const router = useRouter();
   const [percentage, setPercentage] = useState(minPercentage);
   const [throwModalVisible, setThrowModalVisible] = useState(false);
   const [eatModalVisible, setEatModalVisible] = useState(false);
@@ -64,7 +65,9 @@ export default function EditItem({
       <Button
         icon="pencil"
         mode="contained"
-        onPress={() => console.log("edit")}
+        onPress={() => {
+          router.push(`/products/${id}/edit`);
+        }}
       >
         Edit
       </Button>

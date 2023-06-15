@@ -55,7 +55,6 @@ export default function ProductListScreen() {
     }
     //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
   };
-  const edit = (id: number) => {};
   const throwAway = (product: Product) => {
     const productData = { ...product, status: "disposed" };
     console.log(productData);

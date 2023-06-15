@@ -14,6 +14,14 @@ const ProductsLayout = () => (
         presentation: "modal",
       }}
     />
+    <Stack.Screen
+      name="[id]"
+      options={{
+        headerShown: false,
+        title: "???",
+        presentation: "modal",
+      }}
+    />
   </Stack>
 );
 

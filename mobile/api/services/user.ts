@@ -23,5 +23,3 @@ export const useMe = () =>
     },
     select: extractData,
   });
-
-// TODO stats
