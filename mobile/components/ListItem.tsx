@@ -1,5 +1,11 @@
 import React from "react";
-import { differenceInCalendarDays, format, getYear, parse, parseISO } from "date-fns";
+import {
+  differenceInCalendarDays,
+  format,
+  getYear,
+  parse,
+  parseISO,
+} from "date-fns";
 import { StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Text, View } from "./Themed";
 import { AntDesign } from "@expo/vector-icons";
@@ -9,8 +15,8 @@ import EditItem from "./EditItem";
 
 interface ListItemProps {
   item: Product;
-  eatItem: (product: Product, perc: number) => (void);
-  throwAway: (product: Product) => (void);
+  eatItem: (product: Product, perc: number) => void;
+  throwAway: (product: Product) => void;
 }
 
 let maxDate = "9999-12-31";
@@ -27,7 +33,6 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
   let soonerExpirationDate = expDate < opExpDate ? expDate : opExpDate;
 
   // let parsedSoonerExpDate = so
-
 
   let days = differenceInCalendarDays(soonerExpirationDate, new Date()); // TODO - ujemne wartosci zmienic na "PRZETERMINOWANE"
   let warning =
@@ -48,50 +53,55 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
     );
   return (
     <TouchableOpacity onPress={showModal}>
-    <View style={styles.ListItem}>
-      {url && <Image style={styles.ItemImage} source={{ uri: url }} />}
-      <View style={styles.ListItemDescription}>
-        <View style={styles.ListItemDescriptionLeft}>
-          <Text style={styles.ItemCode}>{item.productCode}</Text>
-          <Text style={styles.ItemName}>{item.productName}</Text>
-          <Text style={styles.ItemAmount}>{item.quantity}</Text>
+      <View style={styles.ListItem}>
+        {url && <Image style={styles.ItemImage} source={{ uri: url }} />}
+        <View style={styles.ListItemDescription}>
+          <View style={styles.ListItemDescriptionLeft}>
+            <Text style={styles.ItemCode}>{item.productCode}</Text>
+            <Text style={styles.ItemName}>{item.productName}</Text>
+            <Text style={styles.ItemAmount}>{item.quantity}</Text>
+          </View>
+          <View style={styles.ListItemDescriptionRight}>
+            {item.tags?.map((tag, index) => (
+              <Text key={index}>{`${tag.name}`}</Text>
+            ))}
+          </View>
         </View>
-        <View style={styles.ListItemDescriptionRight}>
-          <Text style={styles.ItemCategories}>Słodycze</Text>
-          <Text style={styles.ItemCategories}>Szafka lewa górna</Text>
-          <Text style={styles.ItemCategories}>Słodycze</Text>
-          <Text style={styles.ItemCategories}>Szafka lewa górna</Text>
+        <View style={styles.ExpirationDate}>
+          <Text style={styles.ExpirationDateDate}>
+            {getYear(soonerExpirationDate) === 9999
+              ? "Set expiration date"
+              : format(soonerExpirationDate, "yyyy-MM-dd")}
+          </Text>
+          <Text
+            style={[
+              styles.ExpirationDateColoredPart,
+              days > 5 && days < 7 ? styles.Orange : days < 5 && styles.Red,
+            ]}
+          >
+            {/* {" "} */}
+            {warning}
+            {getYear(soonerExpirationDate) === 9999
+              ? "Set exp date"
+              : ` ${days} dni`}
+          </Text>
+          <Text style={styles.ExpirationDatePercentage}>
+            {item.usagePercentage}
+          </Text>
         </View>
       </View>
-      <View style={styles.ExpirationDate}>
-        <Text style={styles.ExpirationDateDate}>
-          {getYear(soonerExpirationDate) === 9999
-            ? "Set expiration date"
-            : format(soonerExpirationDate, "yyyy-MM-dd")}
-        </Text>
-        <Text
-          style={[
-            styles.ExpirationDateColoredPart,
-            days > 5 && days < 7 ? styles.Orange : days < 5 && styles.Red,
-          ]}
-        >
-          {/* {" "} */}
-          {warning}
-          {getYear(soonerExpirationDate) === 9999
-            ? "Set exp date"
-            : ` ${days} dni`}
-        </Text>
-        <Text style={styles.ExpirationDatePercentage}>
-          {item.usagePercentage}
-        </Text>
-      </View>
-    </View>
-    <Modal
+      <Modal
         visible={visible}
         onDismiss={hideModal}
         // contentContainerStyle={styles.modal}
       >
-        <EditItem eatItem={eatItem} id={item.id} minPercentage={30} throwAway={throwAway} product={item}/>
+        <EditItem
+          eatItem={eatItem}
+          id={item.id}
+          minPercentage={30}
+          throwAway={throwAway}
+          product={item}
+        />
       </Modal>
     </TouchableOpacity>
   );
