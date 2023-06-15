@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useNavigation } from "expo-router";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, ScrollView } from "react-native";
 import { useForm } from "react-hook-form";
 import { PaperFormInput } from "../../../components/PaperFormInput";
 import React, { useEffect, useState } from "react";
@@ -59,6 +59,7 @@ const AddProduct = () => {
   const { mutate } = useCreateProduct();
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <PaperFormInput
         control={control}
@@ -167,6 +168,8 @@ const AddProduct = () => {
         Add product
       </Button>
     </View>
+
+    </ScrollView>
   );
 };
 
