@@ -47,7 +47,9 @@ export const useProducts = () =>
 export const useProduct = (id: number) =>
   useQuery({
     queryKey: ["products", id],
-    queryFn: ({ queryKey: [, id] }) => apiClient.get(`/products/${id}`),
+    queryFn: ({ queryKey: [, id] }) =>
+      apiClient.get<ApiResponse<Product>>(`/products/${id}`),
+    select: extractData,
   });
 
 export const useCreateProduct = () => {
@@ -67,7 +69,7 @@ export const useCreateProduct = () => {
   });
 };
 
-export const useUpdateProduct = (refetch: () => void) => {
+export const useUpdateProduct = (refetch?: () => void) => {
   const router = useRouter();
   return useMutation({
     mutationKey: ["products"],
@@ -77,7 +79,7 @@ export const useUpdateProduct = (refetch: () => void) => {
       Toast.show("Product updated!", {
         duration: Toast.durations.SHORT,
       });
-      refetch();
+      refetch?.();
       queryClient.invalidateQueries(["stats"]);
     },
   });

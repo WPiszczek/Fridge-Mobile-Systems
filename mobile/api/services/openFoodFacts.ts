@@ -301,7 +301,7 @@ interface Source {
   url: string | null;
 }
 
-export const useOpenFoodFactsProduct = (barcode?: string) =>
+export const useOpenFoodFactsProduct = (barcode?: string, enabled?: boolean) =>
   useQuery(
     ["product", barcode],
     ({ queryKey: [, barcode] }) =>
@@ -309,7 +309,10 @@ export const useOpenFoodFactsProduct = (barcode?: string) =>
         `https://world.openfoodfacts.org/api/v0/product/${barcode}.json`
       ),
     {
-      enabled: !!barcode && (barcode.length === 8 || barcode.length === 13),
+      enabled:
+        !!barcode &&
+        (barcode.length === 8 || barcode.length === 13) &&
+        (enabled === undefined || enabled),
       select: (data) => (data.data.status === 1 ? data.data.product : null),
     }
   );
