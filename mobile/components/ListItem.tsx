@@ -76,7 +76,7 @@ export default function ListItem({
           <Text style={styles.ExpirationDateDate}>
             {getYear(soonerExpirationDate) === 9999
               ? "?"
-              : format(soonerExpirationDate, "yyyy-MM-dd")}
+              : format(soonerExpirationDate, "dd.MM.yyyy")}
           </Text>
           <Text
             style={[
