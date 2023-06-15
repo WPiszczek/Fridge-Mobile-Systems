@@ -67,7 +67,7 @@ export const useCreateProduct = () => {
   });
 };
 
-export const useUpdateProduct = () => {
+export const useUpdateProduct = (refetch: () => void) => {
   const router = useRouter();
   return useMutation({
     mutationKey: ["products"],
@@ -77,6 +77,7 @@ export const useUpdateProduct = () => {
       Toast.show("Product updated!", {
         duration: Toast.durations.SHORT,
       });
+      refetch();
     },
   });
 };

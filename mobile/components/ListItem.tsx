@@ -62,13 +62,13 @@ export default function ListItem({ item, eatItem, throwAway }: ListItemProps) {
         <View style={styles.ListItemDescription}>
           <View style={styles.ListItemDescriptionLeft}>
             <Text style={styles.ItemCode}>{item.productCode}</Text>
-            <Text style={styles.ItemName}>{item.productName}</Text>
-            <Text style={styles.ItemAmount}>{item.quantity}</Text>
-          </View>
-          <View style={styles.ListItemDescriptionRight}>
-            {item.tags?.map((tag, index) => (
-              <Text key={index}>{`${tag.name}`}</Text>
-            ))}
+            <Text numberOfLines={1} style={styles.ItemName}>
+              {item.productName}
+            </Text>
+            {/* <Text style={styles.ItemAmount}>{item.quantity}</Text> */}
+            <Text numberOfLines={1}>
+              {item.tags?.map((tag) => tag.name).join(", ")}
+            </Text>
           </View>
         </View>
         <View style={styles.ExpirationDate}>
@@ -125,10 +125,12 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
     borderRadius: 5,
+    flex: 1,
   },
   ListItemDescription: {
     flexDirection: "row",
     paddingVertical: 10,
+    flex: 5,
   },
   ItemCode: {
     fontSize: 12,
@@ -140,11 +142,7 @@ const styles = StyleSheet.create({
   ListItemDescriptionLeft: {
     padding: 5,
     paddingRight: 10,
-  },
-  ListItemDescriptionRight: {
-    padding: 5,
-    flexDirection: "column",
-    justifyContent: "flex-end",
+    flex: 2,
   },
   ItemCategories: {
     fontSize: 10,
@@ -153,6 +151,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flexDirection: "column",
     alignItems: "flex-end",
+    flex: 2,
   },
   ExpirationDateDate: {
     fontSize: 12,

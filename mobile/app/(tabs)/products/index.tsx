@@ -19,7 +19,7 @@ export default function ProductListScreen() {
   const { data: items, refetch } = useProducts();
   useRefreshOnFocus(refetch);
 
-  const { mutate: mutateUpdate } = useUpdateProduct();
+  const { mutate: mutateUpdate } = useUpdateProduct(refetch);
   // const { mutate: mutateDelete } = useDeleteProduct();
 
   const [visibleFilters, setVisibleFilters] = useState(false);
