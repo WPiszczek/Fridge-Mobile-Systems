@@ -96,13 +96,15 @@ export default function ProductListScreen() {
 
   return (
     <View style={styles.container}>
-      <ProductSearch />
-      {items && (
-        <FilterAndSearch
-          showFilterModal={() => setVisibleFilters(true)}
-          showSortModal={() => setVisibleSort(true)}
-        />
-      )}
+      <View style={styles.topView}>
+        <ProductSearch />
+        {items && (
+          <FilterAndSearch
+            showFilterModal={() => setVisibleFilters(true)}
+            showSortModal={() => setVisibleSort(true)}
+          />
+        )}
+      </View>
       {items != undefined && items.length === 0 && (
         <View style={styles.centeredContainer}>
           <Text>You have no products.</Text>
@@ -150,7 +152,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "flex-start",
-    padding: 15,
+  },
+  topView: {
+    paddingTop: 15,
+    paddingHorizontal: 15,
+    width: "100%",
   },
   scroll: {
     width: "100%",
