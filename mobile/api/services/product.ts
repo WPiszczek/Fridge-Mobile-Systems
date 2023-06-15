@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Toast from "react-native-root-toast";
-import { apiClient, handleError } from "../clients";
+import { apiClient, handleError, queryClient } from "../clients";
 import { AxiosError } from "axios";
 import { extractData } from "../utils";
 import { ApiResponse } from "../types";
@@ -78,6 +78,7 @@ export const useUpdateProduct = (refetch: () => void) => {
         duration: Toast.durations.SHORT,
       });
       refetch();
+      queryClient.invalidateQueries(["stats"]);
     },
   });
 };
