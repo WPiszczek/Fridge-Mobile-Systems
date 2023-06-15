@@ -2,238 +2,125 @@ import { ScrollView, StyleSheet } from "react-native";
 import ListItem from "../../../components/ListItem";
 import { ProductSearch } from "../../../components/ProductSearch";
 import { Text, View } from "../../../components/Themed";
-import { useState, useEffect } from "react";
-import { useProducts, useUpdateProduct, useDeleteProduct } from "../../../api/services/product";
+import { useMemo, useState } from "react";
+import { useProducts, useUpdateProduct } from "../../../api/services/product";
 import { useRefreshOnFocus } from "../../../lib/useRefreshOnFocus";
-import FilterAndSearch from "../../../components/FilterAndSearch";
+import { FilterAndSearch } from "../../../components/FilterAndSearch";
 import { Button, Modal } from "react-native-paper";
-import FilterModal from "../../../components/FilterModal";
-import SortModal from "../../../components/SortModal";
+import { FilterModal, Filters } from "../../../components/FilterModal";
+import SortModal, { Sorting } from "../../../components/SortModal";
 import { useRouter } from "expo-router";
-import { parse } from "date-fns";
-import { Product, EAN } from "../../../api/services/product";
-
-let maxDate = "9999-99-99";
+import { Product } from "../../../api/services/product";
+import { daysLeft, sortByDate } from "../../../lib/dateUtils";
 
 export default function ProductListScreen() {
-  let mock = [
-    {id: 1,
-      userId: 1,
-      productCode: "214143324",
-      pictureUrl: "https://kama-konskie.pl/wp-content/uploads/2018/02/nutella_350g.jpg",
-      productName: "Nutella1",
-      quantity: "400g",
-      status: "tak",
-      usagePercentage: "70",
-      expirationDate: "2023-06-30",
-      openingDate: "2023-06-12",
-      openExpirationDate: "2023-06-30",
-    },
-    {id: 1,
-      userId: 1,
-      productCode: "214143324",
-      pictureUrl: "https://kama-konskie.pl/wp-content/uploads/2018/02/nutella_350g.jpg",
-      productName: "Natella2",
-      quantity: "400g",
-      status: "tak",
-      usagePercentage: "70",
-      expirationDate: "2023-06-30",
-      openingDate: "2023-06-12",
-      openExpirationDate: "2023-06-30",
-    },
-    {id: 1,
-      userId: 1,
-      productCode: "214143324",
-      pictureUrl: "https://kama-konskie.pl/wp-content/uploads/2018/02/nutella_350g.jpg",
-      productName: "Nztella3",
-      quantity: "400g",
-      status: "tak",
-      usagePercentage: "70",
-      expirationDate: "2023-06-30",
-      openingDate: "2023-06-12",
-      openExpirationDate: "2023-06-30",
-    },
-    {id: 1,
-      userId: 1,
-      productCode: "214143324",
-      pictureUrl: "https://kama-konskie.pl/wp-content/uploads/2018/02/nutella_350g.jpg",
-      productName: "Nwtella4",
-      quantity: "400g",
-      status: "tak",
-      usagePercentage: "70",
-      expirationDate: "2023-06-30",
-      openingDate: "2023-06-12",
-      openExpirationDate: "2023-06-30",
-    },
-    {id: 1,
-      userId: 1,
-      productCode: "214143324",
-      pictureUrl: "https://kama-konskie.pl/wp-content/uploads/2018/02/nutella_350g.jpg",
-      productName: "Nutella5",
-      quantity: "400g",
-      status: "tak",
-      usagePercentage: "70",
-      expirationDate: "2023-06-15",
-      openingDate: "2023-06-12",
-      openExpirationDate: "2023-06-30",
-    },
-  ];
   const router = useRouter();
-  const [items, setItems] = useState<Product[]>([]);
-  const [allItems, setAllItems] = useState(items);
-  const [ascending, setAscending] = useState(true);
-  const { data, refetch } = useProducts();
-  const { mutate: mutateUpdate } = useUpdateProduct();
-  const{ mutate: mutateDelete } = useDeleteProduct();
-  
+
+  const { data: items, refetch } = useProducts();
   useRefreshOnFocus(refetch);
-  const useData = async () => {
-    await useRefreshOnFocus(refetch);
-    console.log("useProducts", data);
-    if (data != undefined) {
-      setItems(data);
-    }
-  };
-  useData();
+
+  const { mutate: mutateUpdate } = useUpdateProduct();
+  // const { mutate: mutateDelete } = useDeleteProduct();
 
   const [visibleFilters, setVisibleFilters] = useState(false);
-  const showFilters = () => setVisibleFilters(true);
-  const hideFilters = () => setVisibleFilters(false);
-
-  const showFilterAndSort = (which: string) => {
-    if (which === "filter") {
-      showFilters();
-    } else if (which === "sort") {
-      showSort();
-    }
-  };
-
   const [visibleSort, setVisibleSort] = useState(false);
-  const showSort = () => setVisibleSort(true);
-  const hideSort = () => setVisibleSort(false);
 
-  const filterProducts = (period: string, categories: string[]) => {
-    console.log("PERIOD: " + period);
-    console.log("CATEGORIES: " + categories);
-    if (period === "3") {
-      setItems(allItems.filter((el) => daysLeft(el) < 3));
-    } else if (period === "5") {
-      setItems(allItems.filter((el) => daysLeft(el) < 5));
-    } else {
-      setItems(allItems);
-    }
-  };
+  const [filters, setFilters] = useState<Filters>({
+    days: "all",
+    tags: [],
+  });
 
-  const expDatevsOpenExpDate = (item: Product) => {
-    let exp = item.expirationDate ?? maxDate;
-    let open = item.openExpirationDate ?? maxDate;
-    if (exp < (open)) {
-      return exp;
-    }
-    return open;
-  };
-
-  const sortByDate = (itemA: Product, itemB: Product) => {
-    let expA = expDatevsOpenExpDate(itemA);
-    let expB = expDatevsOpenExpDate(itemB);
-    if(expA > expB){
-      return 1;
-    } else{
-      return -1;
-    }
-  }
-
-  const daysLeft = (item: Product) => {
-    let expDate = expDatevsOpenExpDate(item);
-    if(expDate === null){
-      return Infinity;
-    } else{
-      return Math.ceil(
-        (parse(expDate, "dd.MM.yyyy", new Date()).setHours(
-          0,
-          0,
-          0,
-          0
-        ) -
-          new Date().setHours(0, 0, 0, 0)) /
-          (1000 * 3600 * 24)
-      );
-    }
-  };
-
-  const sortProducts = (by: string, asc: boolean) => {
-    if (by === "name") {
-      if (asc) {
-        setItems((prev) =>
-          prev.sort((a, b) => (a.productName ?? "").localeCompare(b.productName ?? ""))
-        );
-        setAllItems((prev) =>
-          prev.sort((a, b) => (a.productName ?? "").localeCompare(b.productName ?? ""))
-        );
-      } else {
-        setItems((prev) =>
-          prev.sort((a, b) => (b.productName ?? "").localeCompare(a.productName ?? ""))
-        );
-        setAllItems((prev) =>
-          prev.sort((a, b) => (b.productName ?? "").localeCompare(a.productName ?? ""))
-        );
-      }
-    } else if (by === "expirationdate") {
-      if (asc) {
-        setItems((prev) =>
-          prev.sort((a, b) => sortByDate(a, b))
-        );
-        setAllItems((prev) =>
-        prev.sort((a, b) => sortByDate(a, b))
-        );
-      } else {
-        setItems((prev) =>
-        prev.sort((a, b) => sortByDate(b, a))
-        );
-        setAllItems((prev) =>
-        prev.sort((a, b) => sortByDate(b, a))
-        );
-      }
-    }
-  };
+  const [sorting, setSorting] = useState<Sorting>({
+    sortBy: "none",
+    ascending: true,
+  });
 
   const eat = (product: Product, perc: number) => {
     let productData;
-    if(perc === 100){
-      productData = {...product, usagePercentage: perc.toString(), status: "eaten"};
+    if (perc === 100) {
+      productData = {
+        ...product,
+        usagePercentage: perc.toString(),
+        status: "eaten",
+      };
       mutateUpdate(productData);
-    }else{
-      productData = {...product, usagePercentage: perc.toString()};
+    } else {
+      productData = { ...product, usagePercentage: perc.toString() };
       mutateUpdate(productData);
     }
     //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
-    
   };
   const edit = (id: number) => {};
   const throwAway = (product: Product) => {
-    const productData = {...product, status: "disposed"};
+    const productData = { ...product, status: "disposed" };
     console.log(productData);
     mutateUpdate(productData);
-     //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
+    //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
   };
+
+  const filteredSortedItems = useMemo(() => {
+    const filtered = items?.filter((item) => {
+      let daysFilterPassed = false;
+      const days = daysLeft(item);
+      if (filters.days === "all") {
+        daysFilterPassed = true;
+      } else if (filters.days === "3") {
+        daysFilterPassed = days < 3;
+      } else if (filters.days === "5") {
+        daysFilterPassed = days < 5;
+      }
+
+      const tagsFilterPassed =
+        filters.tags.length === 0 ||
+        item.tags?.some((tag) => filters.tags.includes(tag.name));
+
+      return daysFilterPassed && tagsFilterPassed;
+    });
+
+    const sorted = filtered?.sort((a, b) => {
+      const ascendingFactor = sorting.ascending ? 1 : -1;
+      if (sorting.sortBy === "name") {
+        return (
+          (a.productName ?? "").localeCompare(b.productName ?? "") *
+          ascendingFactor
+        );
+      } else if (sorting.sortBy === "expirationDate") {
+        return sortByDate(a, b) * ascendingFactor;
+      } else {
+        return 0;
+      }
+    });
+
+    return sorted;
+  }, [items, filters, sorting]);
 
   return (
     <View style={styles.container}>
       <ProductSearch />
-      {items && <FilterAndSearch props={{ showFilterAndSort }} />}
-      {data != undefined && items.length === 0 && (
+      {items && (
+        <FilterAndSearch
+          showFilterModal={() => setVisibleFilters(true)}
+          showSortModal={() => setVisibleSort(true)}
+        />
+      )}
+      {items != undefined && items.length === 0 && (
         <View style={styles.centeredContainer}>
           <Text>You have no products.</Text>
         </View>
       )}
-      {data != undefined && items.length > 0 && (
+      {items != undefined && items.length > 0 && (
         <ScrollView style={styles.scroll}>
-          {items.map((it, index) => (
-            <ListItem item={it} key={index} eatItem={eat} throwAway={throwAway}/>
+          {filteredSortedItems?.map((it, index) => (
+            <ListItem
+              item={it}
+              key={index}
+              eatItem={eat}
+              throwAway={throwAway}
+            />
           ))}
         </ScrollView>
       )}
-      {!data && (
+      {!items && (
         <View style={styles.centeredContainer}>
           <Button mode="elevated" onPress={() => router.push("/account/login")}>
             Log in, to browse your products
@@ -242,17 +129,17 @@ export default function ProductListScreen() {
       )}
       <Modal
         visible={visibleFilters}
-        onDismiss={hideFilters}
+        onDismiss={() => setVisibleFilters(false)}
         contentContainerStyle={styles.modal}
       >
-        <FilterModal item={{ xD: 3 }} filterProducts={filterProducts} />
+        <FilterModal filters={filters} setFilters={setFilters} />
       </Modal>
       <Modal
         visible={visibleSort}
-        onDismiss={hideSort}
+        onDismiss={() => setVisibleSort(false)}
         contentContainerStyle={styles.modal}
       >
-        <SortModal sort={sortProducts} asc={ascending} setAsc={setAscending} />
+        <SortModal sorting={sorting} setSorting={setSorting} />
       </Modal>
     </View>
   );

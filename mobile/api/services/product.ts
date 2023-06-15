@@ -5,7 +5,7 @@ import { AxiosError } from "axios";
 import { extractData } from "../utils";
 import { ApiResponse } from "../types";
 import { useRouter } from "expo-router";
-import { CreateTag } from "./tags";
+import { CreateTag, Tag } from "./tags";
 
 export type EAN = string;
 export interface Product {
@@ -20,6 +20,7 @@ export interface Product {
   expirationDate: string | null;
   openingDate: string | null;
   openExpirationDate: string | null;
+  tags: Tag[] | null;
 }
 
 export interface CreateProduct {
@@ -76,7 +77,6 @@ export const useUpdateProduct = () => {
       Toast.show("Product updated!", {
         duration: Toast.durations.SHORT,
       });
-      router.back();
     },
   });
 };

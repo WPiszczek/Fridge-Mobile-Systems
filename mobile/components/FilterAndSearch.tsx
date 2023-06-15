@@ -1,18 +1,18 @@
 import { IconButton } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { View } from "./Themed";
-import { useTheme, useThemeColor } from "../theme/utils";
+import { useTheme } from "../theme/utils";
+import { FC } from "react";
 
 interface FilterAndSearchProps {
-  props: {
-    showFilterAndSort: (which: string) => void;
-  };
+  showFilterModal: () => void;
+  showSortModal: () => void;
 }
 
-export default function FilterAndSearch({ props }: FilterAndSearchProps) {
-  const showModal = (which: string) => {
-    props.showFilterAndSort(which);
-  };
+export const FilterAndSearch: FC<FilterAndSearchProps> = ({
+  showFilterModal,
+  showSortModal,
+}) => {
   const theme = useTheme();
   const backgroundColor = theme.colors.background;
   const iconColor = theme.colors.text;
@@ -22,25 +22,24 @@ export default function FilterAndSearch({ props }: FilterAndSearchProps) {
       <IconButton
         icon="filter-menu-outline"
         size={20}
-        onPress={() => showModal("filter")}
         iconColor={iconColor}
         containerColor={backgroundColor}
+        onPress={showFilterModal}
       />
       <IconButton
         icon="sort-alphabetical-ascending"
         size={20}
         iconColor={iconColor}
         containerColor={backgroundColor}
-        onPress={() => showModal("sort")}
+        onPress={showSortModal}
       />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   page: {
     width: "100%",
     flexDirection: "row",
   },
-  iButton: {},
 });

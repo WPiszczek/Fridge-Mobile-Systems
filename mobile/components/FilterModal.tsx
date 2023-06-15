@@ -1,55 +1,24 @@
 import { View, Text } from "./Themed";
 import { StyleSheet } from "react-native";
-import { useState } from "react";
-import { SegmentedButtons, Checkbox } from "react-native-paper";
+import { Dispatch, FC, SetStateAction, useState } from "react";
+import { SegmentedButtons, Chip } from "react-native-paper";
 import { useTheme } from "../theme/utils";
+import { useTags } from "../api/services/tags";
 
-interface FilterModalProps {
-  item: {
-    xD: number;
-  };
-  filterProducts: (period: string, category: string[]) => void;
+export type DaysFilterValues = "3" | "5" | "all";
+
+export interface Filters {
+  days: DaysFilterValues;
+  tags: string[];
 }
 
-export default function FilterModal({
-  item,
-  filterProducts,
-}: FilterModalProps) {
-  const [categoriesCheckboxes, setCategoriesCheckboxes] = useState([
-    { label: "Dairy", value: "dairy", checked: false },
-    { label: "Meat", value: "meat", checked: false },
-    { label: "Drinks", value: "drinks", checked: false },
-    { label: "Warm", value: "warm", checked: false },
-  ]);
-  const [value, setValue] = useState("");
-  const [period, setPeriod] = useState("");
+interface FilterModalProps {
+  filters: Filters;
+  setFilters: Dispatch<SetStateAction<Filters>>;
+}
 
-  const clickPeriod = (per: string) => (event: any) => {
-    setPeriod(per);
-    let categories = categoriesCheckboxes
-    .filter((el) => el.checked === true)
-    .map((el) => el.value);
-    filter(per, categories);
-  };
-
-  const filter = (period: string, categories: string[]) => {
-    filterProducts(period, categories);
-  }
-  const checkboxHandler = (val: string) => {
-    let categories = categoriesCheckboxes.map((checkbox) => {
-        if (checkbox.value === val) {
-          const item = {
-            ...checkbox,
-            checked: !checkbox.checked,
-          };
-          return item;
-        }
-        return checkbox;
-      });
-    setCategoriesCheckboxes(categories);
-    filter(period, categories.filter(el => el.checked === true).map(el => el.value));
-  };
-
+export const FilterModal: FC<FilterModalProps> = ({ filters, setFilters }) => {
+  const { data: tags } = useTags();
   const theme = useTheme();
   const checkedColor = theme.colors.primary;
 
@@ -57,44 +26,59 @@ export default function FilterModal({
     <View style={[{ backgroundColor: theme.colors.background }, styles.page]}>
       <Text style={styles.catHeader}>Shelf life</Text>
       <SegmentedButtons
-        value={value}
-        onValueChange={setValue}
-        style={styles.segButtons}
+        value={filters.days}
+        onValueChange={(value) => {
+          setFilters((filters) => ({
+            ...filters,
+            days: value as DaysFilterValues,
+          }));
+        }}
+        style={styles.segmentButtons}
         buttons={[
           {
-            value: "walk",
-            label: " < 3",
+            value: "3",
+            label: "< 3",
             checkedColor,
-            onPress: clickPeriod("3"),
           },
           {
-            value: "train",
-            label: " < 5",
+            value: "5",
+            label: "< 5",
             checkedColor,
-            onPress: clickPeriod("5"),
           },
           {
-            value: "drive",
-            label: " all ",
+            value: "all",
+            label: "all",
             checkedColor,
-            showSelectedCheck: true,
-            onPress: clickPeriod("all"),
           },
         ]}
       />
       <Text style={styles.catHeader}>Category</Text>
-      {categoriesCheckboxes.map((checkbox, i) => (
-        <Checkbox.Item
-          style={{ width: "100%" }}
-          label={checkbox.label}
-          status={checkbox.checked ? "checked" : "unchecked"}
-          onPress={() => checkboxHandler(checkbox.value)}
-          key={i}
-        />
-      ))}
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 5 }}>
+        {tags?.map(({ id, name }) => (
+          <Chip
+            key={id + name}
+            onPress={() => {
+              if (filters.tags.includes(name)) {
+                setFilters((filters) => ({
+                  ...filters,
+                  tags: filters.tags.filter((tag) => tag !== name),
+                }));
+              } else {
+                setFilters((filters) => ({
+                  ...filters,
+                  tags: [...filters.tags, name],
+                }));
+              }
+            }}
+            selected={filters.tags.includes(name)}
+          >
+            {name}
+          </Chip>
+        ))}
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   page: {
@@ -102,11 +86,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     flexDirection: "column",
     alignItems: "center",
-    // height: "75%",
     borderRadius: 5,
     paddingVertical: 20,
   },
-  segButtons: {
+  segmentButtons: {
     color: "red",
     borderRadius: 50,
     width: "80%",

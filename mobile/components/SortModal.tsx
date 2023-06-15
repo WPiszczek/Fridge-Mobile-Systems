@@ -1,61 +1,53 @@
 import { View, Text } from "./Themed";
 import { StyleSheet } from "react-native";
-import { useState, Dispatch, SetStateAction } from "react";
-import { Checkbox, SegmentedButtons, Switch } from "react-native-paper";
+import { Dispatch, SetStateAction } from "react";
+import { Checkbox, Switch } from "react-native-paper";
 
-interface SortModalProps {
-  sort: (category: string, asc: boolean) => void;
-  asc: boolean;
-  setAsc: Dispatch<SetStateAction<boolean>>;
+export interface Sorting {
+  sortBy: "none" | "name" | "expirationDate";
+  ascending: boolean;
 }
 
-export default function SortModal({ sort, asc, setAsc }: SortModalProps) {
-  const [sortValue, setSortValue] = useState("name");
-  const [sortType, setSortType] = useState([
-    { label: "Name", value: "name", checked: false },
-    { label: "Days Left", value: "expirationdate", checked: false },
-  ]);
+interface SortModalProps {
+  sorting: Sorting;
+  setSorting: Dispatch<SetStateAction<Sorting>>;
+}
 
-  const checkboxHandler = (value: string, index: number) => {
-    setSortValue(value);
-    sort(value, asc);
-    const newValue = sortType.map((checkbox, i) => {
-      if (i !== index)
-        return {
-          ...checkbox,
-          checked: false,
-        };
-      if (i === index) {
-        const item = {
-          ...checkbox,
-          checked: !checkbox.checked,
-        };
-        return item;
-      }
-      return checkbox;
-    });
-    setSortType(newValue);
+const sortBys = [
+  { label: "None", value: "none" },
+  { label: "Name", value: "name" },
+  { label: "Days Left", value: "expirationDate" },
+];
+
+export default function SortModal({ sorting, setSorting }: SortModalProps) {
+  const handleSortByChange = (value: string) => {
+    setSorting((sorting) => ({
+      ...sorting,
+      sortBy: value as Sorting["sortBy"],
+    }));
   };
 
-  const onToggleSwitch = () => {
-    sort(sortValue, !asc);
-    setAsc(!asc);
+  const handleAscendingToggle = (value: boolean) => {
+    setSorting((sorting) => ({
+      ...sorting,
+      ascending: value,
+    }));
   };
 
   return (
     <View style={styles.page}>
       <Text style={styles.catHeader}>Sort by</Text>
-      {sortType.map((checkbox, i) => (
+      {sortBys.map((sortBy) => (
         <Checkbox.Item
+          key={sortBy.value}
           style={styles.checkboxItem}
-          label={checkbox.label}
-          status={checkbox.checked ? "checked" : "unchecked"}
-          onPress={() => checkboxHandler(checkbox.value, i)}
-          key={i}
+          label={sortBy.label}
+          status={sorting.sortBy === sortBy.value ? "checked" : "unchecked"}
+          onPress={() => handleSortByChange(sortBy.value)}
         />
       ))}
       <Text style={styles.catHeader}>Sort ascending</Text>
-      <Switch value={asc} onValueChange={onToggleSwitch} />
+      <Switch value={sorting.ascending} onValueChange={handleAscendingToggle} />
     </View>
   );
 }
