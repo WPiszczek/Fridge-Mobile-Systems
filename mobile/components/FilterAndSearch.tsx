@@ -1,7 +1,6 @@
 import { IconButton } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import { View } from "./Themed";
-import { useTheme } from "../theme/utils";
 import { FC } from "react";
 
 interface FilterAndSearchProps {

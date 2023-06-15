@@ -1,6 +1,9 @@
 import { ScrollView, StyleSheet } from "react-native";
 import ListItem from "../../../components/ListItem";
-import { ProductSearch } from "../../../components/ProductSearch";
+import {
+  ProductSearch,
+  ProductsPageParams,
+} from "../../../components/ProductSearch";
 import { Text, View } from "../../../components/Themed";
 import { useMemo, useState } from "react";
 import { useProducts, useUpdateProduct } from "../../../api/services/product";
@@ -9,7 +12,7 @@ import { FilterAndSearch } from "../../../components/FilterAndSearch";
 import { Button, Modal } from "react-native-paper";
 import { FilterModal, Filters } from "../../../components/FilterModal";
 import SortModal, { Sorting } from "../../../components/SortModal";
-import { useRouter } from "expo-router";
+import { useRouter, useSearchParams } from "expo-router";
 import { Product } from "../../../api/services/product";
 import { daysLeft, sortByDate } from "../../../lib/dateUtils";
 
@@ -58,6 +61,8 @@ export default function ProductListScreen() {
     //TODO - tu przeładowanie zeby pobrac wszystkie aktualne produkty
   };
 
+  const { searchQuery } = useSearchParams<ProductsPageParams>();
+
   const filteredSortedItems = useMemo(() => {
     const filtered = items?.filter((item) => {
       let daysFilterPassed = false;
@@ -74,7 +79,14 @@ export default function ProductListScreen() {
         filters.tags.length === 0 ||
         item.tags?.some((tag) => filters.tags.includes(tag.name));
 
-      return daysFilterPassed && tagsFilterPassed;
+      const searchQueryPassed =
+        searchQuery === undefined ||
+        searchQuery === "" ||
+        item.productName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.productCode?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.tags?.some((tag) => tag.name.includes(searchQuery));
+
+      return daysFilterPassed && tagsFilterPassed && searchQueryPassed;
     });
 
     const sorted = filtered?.sort((a, b) => {
@@ -92,7 +104,7 @@ export default function ProductListScreen() {
     });
 
     return sorted;
-  }, [items, filters, sorting]);
+  }, [items, filters, sorting, searchQuery]);
 
   return (
     <View style={styles.container}>

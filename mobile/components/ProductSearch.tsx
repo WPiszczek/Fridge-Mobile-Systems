@@ -3,14 +3,14 @@ import { useRouter, useSearchParams } from "expo-router";
 import { StyleSheet } from "react-native";
 import { TextInput } from "react-native-paper";
 
-interface Params {
+export interface ProductsPageParams {
   [key: string]: string | string[];
   searchQuery: string;
 }
 
 export const ProductSearch = () => {
   const router = useRouter();
-  const { searchQuery } = useSearchParams<Params>();
+  const { searchQuery } = useSearchParams<ProductsPageParams>();
 
   return (
     <TextInput
